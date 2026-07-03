@@ -436,6 +436,12 @@ img {
   text-transform: uppercase;
 }
 
+.home-hero-content h1 {
+  max-width: 920px;
+  font-size: clamp(54px, 5.8vw, 96px);
+  line-height: 0.98;
+}
+
 .home-hero-content p:not(.eyebrow),
 .page-hero-content p:not(.eyebrow),
 .simple-hero p {

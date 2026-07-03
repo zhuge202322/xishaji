@@ -39,7 +39,11 @@ export default function HomePage() {
         <div className="container home-hero-content">
           <div className="hero-copy">
             <p className="eyebrow">Industrial precision for global mining projects</p>
-            <h1>Advanced Crushing & Mineral Processing Solutions</h1>
+            <h1 aria-label="Advanced Crushing & Mineral Processing Solutions">
+              <span>Advanced Crushing &</span>
+              <span>Mineral Processing</span>
+              <span>Solutions</span>
+            </h1>
             <p>
               VICMACH manufactures heavy-duty equipment and complete EPC production lines
               for sand making, crushing, beneficiation, grinding, building materials, and washing systems.

@@ -7,10 +7,13 @@ import {
   CheckCircle2,
   ClipboardCheck,
   Factory,
+  FileText,
   Globe2,
   Mail,
   MapPin,
+  MessageSquare,
   Phone,
+  Send,
   ShieldCheck
 } from "lucide-react";
 import { SectionHeading } from "@/components/SectionHeading";
@@ -22,9 +25,11 @@ import {
   TrustProofGrid,
   VideoEvidence
 } from "@/components/TrustEvidence";
-import { categories, company, projects, stats, timeline } from "@/data/site";
+import { categories, company, equipmentGroups, oreSolutionGroups, projects, stats, timeline } from "@/data/site";
 
 export default function HomePage() {
+  const whatsappHref = `https://wa.me/${company.phone.replace(/\D/g, "")}`;
+
   return (
     <main>
       <section className="home-hero">
@@ -178,6 +183,89 @@ export default function HomePage() {
                 </Link>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      <section className="section equipment-directory-section">
+        <div className="container">
+          <div className="section-row">
+            <SectionHeading
+              eyebrow="Equipment Center"
+              title="Specific machines for every stage of the plant"
+              text="The equipment center is organized around the process chain from crushing and grinding to separation, dewatering, conveying, and wet washing."
+            />
+            <Link className="text-link" href="/equipment">
+              View Equipment Center <ArrowRight size={16} aria-hidden />
+            </Link>
+          </div>
+          <div className="equipment-directory-grid">
+            {equipmentGroups.map((group) => (
+              <article className="equipment-directory-card" key={group.title}>
+                <div>
+                  <p className="eyebrow">{String(group.items.length).padStart(2, "0")} models</p>
+                  <h3>{group.title}</h3>
+                  <p>{group.text}</p>
+                </div>
+                <ul>
+                  {group.items.slice(0, 7).map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+                <Link href={group.href}>
+                  Explore Category <ArrowRight size={16} aria-hidden />
+                </Link>
+              </article>
+            ))}
+          </div>
+          <div className="conversion-mini-band">
+            <strong>Need a machine list matched to your material?</strong>
+            <div className="conversion-actions">
+              <Link href="/contact">
+                <FileText size={16} aria-hidden /> Request a Quote
+              </Link>
+              <Link href="/contact#inquiry-title">
+                <Send size={16} aria-hidden /> Send Material & Capacity
+              </Link>
+              <a href={whatsappHref} target="_blank" rel="noreferrer">
+                <MessageSquare size={16} aria-hidden /> WhatsApp Engineer
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="section ore-pathway-section">
+        <div className="container ore-pathway-layout">
+          <div className="ore-pathway-copy">
+            <p className="eyebrow">Ore Solutions</p>
+            <h2>Process routes organized by mineral type</h2>
+            <p>
+              VICMACH connects ore properties with crushing, grinding, gravity, flotation,
+              magnetic separation, thickening, dewatering, and water recovery systems.
+            </p>
+            <div className="ore-proof-list">
+              <span>Sample review</span>
+              <span>Flow-sheet design</span>
+              <span>Model selection</span>
+              <span>Commissioning support</span>
+            </div>
+            <Link className="button button-primary" href="/ore-solutions">
+              Explore Ore Solutions <ArrowRight size={18} aria-hidden />
+            </Link>
+          </div>
+          <div className="ore-pathway-grid">
+            {oreSolutionGroups.map((group) => (
+              <Link className="ore-pathway-card" key={group.title} href={group.href}>
+                <h3>{group.title}</h3>
+                <p>{group.text}</p>
+                <div>
+                  {group.ores.map((ore) => (
+                    <span key={ore}>{ore}</span>
+                  ))}
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </section>

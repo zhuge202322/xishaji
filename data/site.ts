@@ -35,11 +35,14 @@ export const company = {
 };
 
 export const navItems = [
-  { label: "Solutions", href: "/#solutions" },
+  { label: "Home", href: "/" },
+  { label: "About Us", href: "/about" },
+  { label: "One-stop Plant Service", href: "/one-stop-service" },
+  { label: "Ore Solutions", href: "/ore-solutions" },
+  { label: "Equipment Center", href: "/equipment" },
   { label: "Projects", href: "/projects" },
-  { label: "Factory Visit", href: "/factory-visit" },
-  { label: "About", href: "/about" },
-  { label: "Support", href: "/contact" }
+  { label: "News Center", href: "/news" },
+  { label: "Contact Us", href: "/contact" }
 ];
 
 export const solutionLinks = [
@@ -47,6 +50,159 @@ export const solutionLinks = [
   { label: "Crushing", href: "/solutions/crushing" },
   { label: "Mineral Processing", href: "/solutions/mineral-processing" },
   { label: "Grinding & Milling", href: "/solutions/grinding-milling" }
+];
+
+export const equipmentGroups = [
+  {
+    title: "Crushing & Screening",
+    href: "/equipment#crushing-screening",
+    text: "Primary, secondary, shaping, feeding, and screening equipment for hard rock and aggregate plants.",
+    items: [
+      "HST single-cylinder cone crusher",
+      "CS multi-cylinder cone crusher",
+      "C series impact crusher",
+      "PF impact crusher",
+      "PCZ/X heavy hammer crusher",
+      "VSI sand maker",
+      "YK vibrating screen",
+      "HD / HD-S heavy vibrating screen",
+      "VHS three-axis elliptical screen",
+      "GS heavy bar screen",
+      "ZSG heavy linear screen",
+      "FYB square tumbler screen",
+      "TS high-frequency dewatering screen",
+      "Trommel screen"
+    ]
+  },
+  {
+    title: "Grinding & Classification",
+    href: "/equipment#grinding-classification",
+    text: "Milling and particle-size control systems for ore liberation and powder preparation.",
+    items: [
+      "High-efficiency autogenous mill",
+      "Grid-type ball mill",
+      "Overflow ball mill",
+      "Rod mill",
+      "Dry ball mill",
+      "Long-cylinder ball mill",
+      "Hydrocyclone",
+      "Spiral classifier",
+      "Cyclone powder separator"
+    ]
+  },
+  {
+    title: "Beneficiation Equipment",
+    href: "/equipment#beneficiation-equipment",
+    text: "Gravity, flotation, and magnetic separation equipment for metallic and nonmetallic ores.",
+    items: [
+      "SF mechanical agitation flotation cell",
+      "XCF air inflation flotation cell",
+      "KYF air inflation flotation cell",
+      "Diaphragm jig",
+      "Sawtooth wave jig",
+      "Centrifugal concentrator",
+      "Bowl concentrator",
+      "Shaking table",
+      "Spiral chute",
+      "CT permanent magnetic drum separator",
+      "High-gradient magnetic separator",
+      "Permanent magnetic pulley"
+    ]
+  },
+  {
+    title: "Thickening & Dewatering",
+    href: "/equipment#thickening-dewatering",
+    text: "Concentrate and tailings water-control equipment for stable downstream handling.",
+    items: [
+      "Hydraulic center-drive high-efficiency thickener",
+      "Peripheral drive thickener",
+      "Deep cone thickener",
+      "Ceramic vacuum filter",
+      "Disc vacuum filter",
+      "Filter press",
+      "TS high-frequency dewatering screen"
+    ]
+  },
+  {
+    title: "Supporting Systems",
+    href: "/equipment#supporting-systems",
+    text: "Plant auxiliary systems connecting crushing, milling, separation, dosing, and discharge.",
+    items: [
+      "Belt conveyor",
+      "High-efficiency agitation tank",
+      "Slurry lifting agitation tank",
+      "Standard agitation tank",
+      "Reagent agitation tank"
+    ]
+  },
+  {
+    title: "Wet Washing",
+    href: "/equipment#wet-washing",
+    text: "Ore washing, sand washing, scrubbing, recovery, and mud-water treatment systems.",
+    items: [
+      "RX series ore washer",
+      "Spiral sand washer",
+      "Wheel sand washer",
+      "Sand washing, dewatering and recovery unit",
+      "Fine sand recovery machine",
+      "Rotary ore washer",
+      "Scrubber"
+    ]
+  }
+];
+
+export const newsItems = [
+  {
+    title: "What to prepare before requesting a crushing plant quotation",
+    category: "Procurement Guide",
+    text: "Material hardness, feed size, target capacity, final grading, site layout, and power conditions help engineers select the right crushing and screening route.",
+    href: "/contact"
+  },
+  {
+    title: "How ore samples shape a beneficiation process flow",
+    category: "Ore Processing",
+    text: "Recovery targets depend on mineral composition, liberation size, mud content, and water conditions, so sample testing and process review should happen before model selection.",
+    href: "/ore-solutions"
+  },
+  {
+    title: "Factory visit checklist for overseas machinery buyers",
+    category: "Supplier Verification",
+    text: "Workshop scale, equipment stock, inspection routines, certificates, export support, and service response are practical signals for judging supplier reliability.",
+    href: "/factory-visit"
+  },
+  {
+    title: "Why washing and water recovery matter in sand production",
+    category: "Sand & Aggregate",
+    text: "Integrated washing, dewatering, fine recovery, and mud-water treatment help control finished sand quality while reducing site discharge pressure.",
+    href: "/equipment#wet-washing"
+  }
+];
+
+export const oreSolutionGroups = [
+  {
+    title: "Precious & Polymetallic",
+    href: "/ore-solutions#precious-polymetallic",
+    text: "Gold, lead-zinc-silver, and tailings reprocessing flows combining crushing, grinding, gravity, flotation, and leaching routes.",
+    ores: ["Gold ore", "Lead-zinc-silver ore", "Tailings reprocessing"]
+  },
+  {
+    title: "Nonferrous & Rare Metals",
+    href: "/ore-solutions#nonferrous-rare",
+    text: "Copper, tin, tungsten, tantalum, niobium, lithium, and molybdenum projects configured around liberation and recovery targets.",
+    ores: ["Copper ore", "Tin-tungsten-tantalum-niobium ore", "Lithium ore", "Molybdenum ore"]
+  },
+  {
+    title: "Ferrous Metals",
+    href: "/ore-solutions#ferrous-metals",
+    text: "Iron, manganese, and chromite processing with washing, gravity, magnetic separation, flotation, and tailings recovery options.",
+    ores: ["Iron ore magnetic separation", "Manganese ore", "Chromite ore"]
+  },
+  {
+    title: "Nonmetallic Minerals",
+    href: "/ore-solutions#nonmetallic-minerals",
+    text: "Quartz, graphite, fluorite, feldspar, and barite purification routes for industrial mineral markets.",
+    ores: ["Quartz / silica", "Graphite", "Fluorite", "Feldspar", "Barite"]
+  }
 ];
 
 export const stats = [

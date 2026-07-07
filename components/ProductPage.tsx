@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, Ruler } from "lucide-react";
-import type { Product } from "@/data/site";
+import { ArrowRight, CheckCircle2, FileText, MessageSquare, Ruler, Send } from "lucide-react";
+import { company, type Product } from "@/data/site";
 import { SectionHeading } from "./SectionHeading";
 
 type ProductPageProps = {
@@ -10,6 +10,7 @@ type ProductPageProps = {
 
 export function ProductPage({ product }: ProductPageProps) {
   const ProductIcon = product.icon;
+  const whatsappHref = `https://wa.me/${company.phone.replace(/\D/g, "")}`;
 
   return (
     <main>
@@ -22,10 +23,33 @@ export function ProductPage({ product }: ProductPageProps) {
           <p>{product.intro}</p>
           <div className="hero-actions">
             <Link className="button button-primary" href="/contact">
-              Request Proposal <ArrowRight size={18} aria-hidden />
+              Request a Quote <ArrowRight size={18} aria-hidden />
             </Link>
-            <a className="button button-ghost-dark" href="#specs">
-              Technical Specs
+            <Link className="button button-ghost-dark" href="/contact#inquiry-title">
+              Send Material & Capacity
+            </Link>
+            <a className="button button-ghost-dark" href={whatsappHref} target="_blank" rel="noreferrer">
+              WhatsApp Engineer
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section className="conversion-strip">
+        <div className="container conversion-strip-grid">
+          <div>
+            <strong>For accurate selection</strong>
+            <span>Send raw material, feed size, output capacity, final size, and site photos.</span>
+          </div>
+          <div className="conversion-actions">
+            <Link href="/contact">
+              <FileText size={16} aria-hidden /> Request a Quote
+            </Link>
+            <Link href="/contact#inquiry-title">
+              <Send size={16} aria-hidden /> Send Material & Capacity
+            </Link>
+            <a href={whatsappHref} target="_blank" rel="noreferrer">
+              <MessageSquare size={16} aria-hidden /> Contact Engineer on WhatsApp
             </a>
           </div>
         </div>
@@ -114,6 +138,16 @@ export function ProductPage({ product }: ProductPageProps) {
               </div>
             ))}
           </div>
+          <div className="spec-cta-card">
+            <h3>Need a verified model list?</h3>
+            <p>
+              Engineers can match the process route after reviewing ore properties, capacity,
+              water conditions, and required product size.
+            </p>
+            <Link className="button button-secondary" href="/contact#inquiry-title">
+              Submit Project Data
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -127,9 +161,14 @@ export function ProductPage({ product }: ProductPageProps) {
               VICMACH engineers will prepare a practical process route.
             </p>
           </div>
-          <Link className="button button-primary" href="/contact">
-            Contact Sales <CheckCircle2 size={18} aria-hidden />
-          </Link>
+          <div className="cta-button-row">
+            <Link className="button button-primary" href="/contact">
+              Request a Quote <CheckCircle2 size={18} aria-hidden />
+            </Link>
+            <a className="button button-ghost-dark" href={whatsappHref} target="_blank" rel="noreferrer">
+              Contact Engineer on WhatsApp <MessageSquare size={18} aria-hidden />
+            </a>
+          </div>
         </div>
       </section>
     </main>

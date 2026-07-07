@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { FloatingInquiry } from "@/components/FloatingInquiry";
 import { GsapInteractions } from "@/components/GsapInteractions";
 import { company } from "@/data/site";
 
@@ -32,12 +33,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en" data-scroll-behavior="smooth">
       <body>
         <a className="skip-link" href="#main">
           Skip to main content
         </a>
         <Header />
+        <FloatingInquiry />
         <div id="main">{children}</div>
         <Footer />
         <GsapInteractions />

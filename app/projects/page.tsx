@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, Globe2, MapPin } from "lucide-react";
+import { CheckCircle2, FileText, Globe2, MapPin, MessageSquare, Send } from "lucide-react";
 import { SectionHeading } from "@/components/SectionHeading";
-import { projects } from "@/data/site";
+import { company, projects } from "@/data/site";
 
 export const metadata: Metadata = {
   title: "Global Projects | VICMACH",
@@ -12,6 +12,8 @@ export const metadata: Metadata = {
 };
 
 export default function ProjectsPage() {
+  const whatsappHref = `https://wa.me/${company.phone.replace(/\D/g, "")}`;
+
   return (
     <main>
       <section className="simple-hero blueprint">
@@ -54,9 +56,17 @@ export default function ProjectsPage() {
                       <dd>{project.material}</dd>
                     </div>
                   </dl>
-                  <Link className="text-link" href="/contact">
-                    Request similar solution <ArrowRight size={16} aria-hidden />
-                  </Link>
+                  <div className="case-action-row">
+                    <Link href="/contact">
+                      <FileText size={16} aria-hidden /> Request Similar Solution
+                    </Link>
+                    <Link href="/contact#inquiry-title">
+                      <Send size={16} aria-hidden /> Send Material & Capacity
+                    </Link>
+                    <a href={whatsappHref} target="_blank" rel="noreferrer">
+                      <MessageSquare size={16} aria-hidden /> WhatsApp Engineer
+                    </a>
+                  </div>
                 </div>
               </article>
             ))}

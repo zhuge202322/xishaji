@@ -6,6 +6,7 @@ import { ArrowLeft, ArrowRight, CheckCircle2, ClipboardCheck, FileText, Gauge, M
 import { SectionHeading } from "@/components/SectionHeading";
 import { CertificateEvidence, ManufacturingEvidence } from "@/components/TrustEvidence";
 import { company } from "@/data/site";
+import { getEquipmentDocxDetail } from "@/data/equipment-docx-details";
 import { equipmentProducts, getEquipmentProductBySlug, getEquipmentProductByTitle, type EquipmentProduct } from "@/data/equipment-products";
 
 type PageProps = {
@@ -24,13 +25,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {};
   }
 
+  const docxDetail = getEquipmentDocxDetail(slug);
+
   return {
     title: `${product.title} | Equipment Center | VICMACH`,
     description: product.summary,
     openGraph: {
       title: `${product.title} | VICMACH Equipment`,
       description: product.summary,
-      images: [product.heroImage]
+      images: [docxDetail?.productImage?.src ?? product.heroImage]
     }
   };
 }
@@ -49,6 +52,7 @@ export default async function EquipmentDetailPage({ params }: PageProps) {
 
   const whatsappHref = `https://wa.me/${company.phone.replace(/\D/g, "")}`;
   const relatedProducts = product.relatedTitles.map(getEquipmentProductByTitle).filter(isEquipmentProduct);
+  const docxDetail = getEquipmentDocxDetail(product.slug);
 
   return (
     <main>
@@ -115,6 +119,70 @@ export default async function EquipmentDetailPage({ params }: PageProps) {
           </div>
         </div>
       </section>
+
+      {docxDetail ? (
+        <section className="section equipment-docx-section">
+          <div className="container equipment-docx-layout">
+            <div className="equipment-docx-media">
+              {docxDetail.productImage ? (
+                <Image
+                  src={docxDetail.productImage.src}
+                  alt={docxDetail.productImage.alt}
+                  width={docxDetail.productImage.width}
+                  height={docxDetail.productImage.height}
+                  sizes="(max-width: 900px) 100vw, 44vw"
+                />
+              ) : (
+                <Image src={product.heroImage} alt={product.heroAlt} width={980} height={720} sizes="(max-width: 900px) 100vw, 44vw" />
+              )}
+              <span>{docxDetail.originalTitle}</span>
+            </div>
+            <div className="equipment-docx-copy">
+              <p className="eyebrow">DOCX Product Detail</p>
+              <h2 className="section-title-with-icon">
+                <FileText size={32} aria-hidden />
+                Product Description
+              </h2>
+              <p className="equipment-docx-source">Source file: {docxDetail.sourceDocument}</p>
+              <p className="large-copy equipment-docx-intro">{docxDetail.intro || product.summary}</p>
+              {docxDetail.advantages.length > 0 ? (
+                <div className="equipment-docx-advantages">
+                  <h3>Document Advantages</h3>
+                  <ul>
+                    {docxDetail.advantages.map((advantage) => (
+                      <li key={advantage}>
+                        <CheckCircle2 size={16} aria-hidden />
+                        <span>{advantage}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+      {docxDetail?.parameterImage ? (
+        <section className="section section-muted equipment-parameters-section">
+          <div className="container">
+            <SectionHeading
+              eyebrow="Technical Parameters"
+              title={`${product.title} parameter table`}
+              text="The table image below is extracted from the original category DOCX technical document."
+            />
+            <a className="equipment-parameter-frame" href={docxDetail.parameterImage.src} target="_blank" rel="noreferrer">
+              <Image
+                src={docxDetail.parameterImage.src}
+                alt={docxDetail.parameterImage.alt}
+                width={docxDetail.parameterImage.width}
+                height={docxDetail.parameterImage.height}
+                sizes="(max-width: 1200px) 100vw, 1160px"
+              />
+            </a>
+          </div>
+        </section>
+      ) : null}
 
       <section className="section blueprint">
         <div className="container">

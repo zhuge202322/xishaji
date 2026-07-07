@@ -1703,6 +1703,96 @@ img {
   margin-bottom: 14px;
 }
 
+.equipment-docx-layout {
+  display: grid;
+  grid-template-columns: minmax(360px, 0.9fr) minmax(0, 1.1fr);
+  gap: clamp(28px, 4vw, 58px);
+  align-items: center;
+}
+
+.equipment-docx-media {
+  display: grid;
+  gap: 14px;
+  border: 1px solid var(--line-cool);
+  background: #fff;
+  padding: clamp(18px, 3vw, 34px);
+  box-shadow: var(--shadow-tight);
+}
+
+.equipment-docx-media img {
+  width: 100%;
+  height: auto;
+  max-height: 560px;
+  object-fit: contain;
+}
+
+.equipment-docx-media span,
+.equipment-docx-source {
+  color: var(--primary-deep);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.equipment-docx-copy {
+  min-width: 0;
+}
+
+.equipment-docx-intro {
+  max-width: 860px;
+}
+
+.equipment-docx-advantages {
+  margin-top: 28px;
+  border-top: 1px solid var(--line-cool);
+  padding-top: 24px;
+}
+
+.equipment-docx-advantages h3 {
+  margin: 0 0 16px;
+  color: var(--ink);
+  font-size: 22px;
+}
+
+.equipment-docx-advantages ul {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.equipment-docx-advantages li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.equipment-docx-advantages svg {
+  flex: 0 0 auto;
+  margin-top: 4px;
+  color: var(--primary-deep);
+}
+
+.equipment-parameter-frame {
+  display: block;
+  margin-top: 38px;
+  overflow-x: auto;
+  border: 1px solid var(--line-cool);
+  background: #fff;
+  padding: clamp(14px, 2vw, 24px);
+  box-shadow: var(--shadow-tight);
+}
+
+.equipment-parameter-frame img {
+  width: 100%;
+  min-width: 820px;
+  height: auto;
+  object-fit: contain;
+}
+
 .equipment-related-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1757,6 +1847,13 @@ img {
   font-size: 12px;
   font-weight: 800;
   text-transform: uppercase;
+}
+
+@media (min-width: 1100px) {
+  .equipment-docx-copy,
+  .equipment-parameters-section .section-heading {
+    padding-right: 92px;
+  }
 }
 
 .procurement-grid,
@@ -2902,6 +2999,7 @@ img {
   .specs-layout,
   .contact-page-grid,
   .ore-pathway-layout,
+  .equipment-docx-layout,
   .equipment-catalog-card,
   .procurement-grid,
   .process-route-layout,
@@ -3218,6 +3316,14 @@ img {
   .spec-table div {
     grid-template-columns: 1fr;
     gap: 8px;
+  }
+
+  .equipment-docx-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .equipment-parameter-frame img {
+    min-width: 680px;
   }
 
   .simple-hero {

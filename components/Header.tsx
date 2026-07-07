@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowRight, ChevronDown, Menu, X } from "lucide-react";
 import { equipmentProducts, getEquipmentProductByTitle } from "@/data/equipment-products";
 import { oreProductGroups } from "@/data/ore-products";
@@ -14,21 +14,68 @@ const oreRouteCount = oreProductGroups.reduce((total, group) => total + group.pr
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState<"ore" | "equipment" | null>(null);
+  const headerRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    function handlePointerDown(event: PointerEvent) {
+      if (!headerRef.current?.contains(event.target as Node)) {
+        setActiveDropdown(null);
+      }
+    }
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setActiveDropdown(null);
+        setOpen(false);
+      }
+    }
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
+  function toggleDropdown(dropdown: "ore" | "equipment") {
+    setOpen(false);
+    setActiveDropdown((current) => (current === dropdown ? null : dropdown));
+  }
+
+  function closeDropdown() {
+    setActiveDropdown(null);
+  }
 
   return (
-    <header className="site-header">
+    <header className="site-header" ref={headerRef}>
       <div className="header-inner">
         <Logo />
 
         <nav className="desktop-nav" aria-label="Main navigation">
           {navItems.map((item) => {
             if (item.label === "Ore Solutions") {
+              const isOpen = activeDropdown === "ore";
+
               return (
-                <div className="nav-dropdown" key={item.href}>
-                  <Link className="nav-link nav-button" href={item.href}>
+                <div className={`nav-dropdown ${isOpen ? "is-open" : ""}`} key={item.href}>
+                  <button
+                    className="nav-link nav-button"
+                    type="button"
+                    aria-controls="ore-mega-menu"
+                    aria-expanded={isOpen}
+                    aria-haspopup="true"
+                    onClick={() => toggleDropdown("ore")}
+                  >
                     {item.label} <ChevronDown size={14} aria-hidden />
-                  </Link>
-                  <div className="mega-menu mega-menu-ore" aria-label="Ore solution links">
+                  </button>
+                  <div
+                    className={`mega-menu mega-menu-ore ${isOpen ? "is-open" : ""}`}
+                    id="ore-mega-menu"
+                    aria-label="Ore solution links"
+                  >
                     <div className="mega-feature">
                       <span>Ore Solution Center</span>
                       <strong>{oreRouteCount} DOCX-backed ore routes</strong>
@@ -43,21 +90,21 @@ export function Header() {
                           <span>Ore Pages</span>
                         </div>
                       </div>
-                      <Link className="mega-feature-link" href="/ore-solutions">
+                      <Link className="mega-feature-link" href="/ore-solutions" onClick={closeDropdown}>
                         View all ore solutions <ArrowRight size={14} aria-hidden />
                       </Link>
                     </div>
                     <div className="mega-content-grid mega-content-grid-ore">
                       {oreProductGroups.map((group) => (
                         <div className="mega-ore-column" key={group.title}>
-                          <Link className="mega-group-link" href={group.href}>
+                          <Link className="mega-group-link" href={group.href} onClick={closeDropdown}>
                             {group.title}
                           </Link>
                           <p>{group.text}</p>
                           <ul className="mega-product-list">
                             {group.products.map((ore) => (
                               <li key={ore.slug}>
-                                <Link className="mega-product-link" href={`/ore-solutions/${ore.slug}`}>
+                                <Link className="mega-product-link" href={`/ore-solutions/${ore.slug}`} onClick={closeDropdown}>
                                   {ore.shortTitle}
                                 </Link>
                               </li>
@@ -72,12 +119,25 @@ export function Header() {
             }
 
             if (item.label === "Equipment Center") {
+              const isOpen = activeDropdown === "equipment";
+
               return (
-                <div className="nav-dropdown" key={item.href}>
-                  <Link className="nav-link nav-button" href={item.href}>
+                <div className={`nav-dropdown ${isOpen ? "is-open" : ""}`} key={item.href}>
+                  <button
+                    className="nav-link nav-button"
+                    type="button"
+                    aria-controls="equipment-mega-menu"
+                    aria-expanded={isOpen}
+                    aria-haspopup="true"
+                    onClick={() => toggleDropdown("equipment")}
+                  >
                     {item.label} <ChevronDown size={14} aria-hidden />
-                  </Link>
-                  <div className="mega-menu mega-menu-equipment" aria-label="Equipment category links">
+                  </button>
+                  <div
+                    className={`mega-menu mega-menu-equipment ${isOpen ? "is-open" : ""}`}
+                    id="equipment-mega-menu"
+                    aria-label="Equipment category links"
+                  >
                     <div className="mega-feature">
                       <span>Equipment Center</span>
                       <strong>{equipmentProductCount} machinery detail pages</strong>
@@ -92,14 +152,14 @@ export function Header() {
                           <span>Models</span>
                         </div>
                       </div>
-                      <Link className="mega-feature-link" href="/equipment">
+                      <Link className="mega-feature-link" href="/equipment" onClick={closeDropdown}>
                         View equipment center <ArrowRight size={14} aria-hidden />
                       </Link>
                     </div>
                     <div className="mega-content-grid mega-content-grid-equipment">
                       {equipmentGroups.map((group) => (
                         <div className="mega-equipment-column" key={group.title}>
-                          <Link className="mega-group-link" href={group.href}>
+                          <Link className="mega-group-link" href={group.href} onClick={closeDropdown}>
                             {group.title}
                           </Link>
                           <p>{group.text}</p>
@@ -110,7 +170,7 @@ export function Header() {
                               return (
                                 <li key={product}>
                                   {equipmentProduct ? (
-                                    <Link className="mega-product-link" href={`/equipment/${equipmentProduct.slug}`}>
+                                    <Link className="mega-product-link" href={`/equipment/${equipmentProduct.slug}`} onClick={closeDropdown}>
                                       {product}
                                     </Link>
                                   ) : (
@@ -129,7 +189,7 @@ export function Header() {
             }
 
             return (
-              <Link className="nav-link" key={item.href} href={item.href}>
+              <Link className="nav-link" key={item.href} href={item.href} onClick={closeDropdown}>
                 {item.label}
               </Link>
             );
@@ -146,7 +206,10 @@ export function Header() {
             type="button"
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
-            onClick={() => setOpen((value) => !value)}
+            onClick={() => {
+              closeDropdown();
+              setOpen((value) => !value);
+            }}
           >
             {open ? <X size={22} aria-hidden /> : <Menu size={22} aria-hidden />}
           </button>

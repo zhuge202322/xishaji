@@ -1149,7 +1149,6 @@ img {
 
 .is-gsap-card {
   position: relative;
-  transform-style: preserve-3d;
   backface-visibility: hidden;
   will-change: transform;
 }

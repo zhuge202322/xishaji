@@ -3,7 +3,9 @@
 import Link from "next/link";
 import { useState } from "react";
 import { ChevronDown, Menu, X } from "lucide-react";
-import { company, equipmentGroups, navItems, oreSolutionGroups } from "@/data/site";
+import { getEquipmentProductByTitle } from "@/data/equipment-products";
+import { oreProductGroups } from "@/data/ore-products";
+import { company, equipmentGroups, navItems } from "@/data/site";
 import { Logo } from "./Logo";
 
 const dropdownLabels = new Set(["Ore Solutions", "Equipment Center"]);
@@ -25,12 +27,22 @@ export function Header() {
                     {item.label} <ChevronDown size={14} aria-hidden />
                   </Link>
                   <div className="mega-menu mega-menu-ore" aria-label="Ore solution links">
-                    {oreSolutionGroups.map((group) => (
-                      <Link className="mega-card" key={group.title} href={group.href}>
-                        <strong>{group.title}</strong>
-                        <span>{group.text}</span>
-                        <small>{group.ores.join(" / ")}</small>
-                      </Link>
+                    {oreProductGroups.map((group) => (
+                      <div className="mega-ore-column" key={group.title}>
+                        <Link className="mega-group-link" href={group.href}>
+                          {group.title}
+                        </Link>
+                        <p>{group.text}</p>
+                        <ul className="mega-product-list">
+                          {group.products.map((ore) => (
+                            <li key={ore.slug}>
+                              <Link className="mega-product-link" href={`/ore-solutions/${ore.slug}`}>
+                                {ore.shortTitle}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     ))}
                   </div>
                 </div>
@@ -50,10 +62,22 @@ export function Header() {
                           {group.title}
                         </Link>
                         <p>{group.text}</p>
-                        <ul>
-                          {group.items.slice(0, 6).map((product) => (
-                            <li key={product}>{product}</li>
-                          ))}
+                        <ul className="mega-product-list">
+                          {group.items.slice(0, 6).map((product) => {
+                            const equipmentProduct = getEquipmentProductByTitle(product);
+
+                            return (
+                              <li key={product}>
+                                {equipmentProduct ? (
+                                  <Link className="mega-product-link" href={`/equipment/${equipmentProduct.slug}`}>
+                                    {product}
+                                  </Link>
+                                ) : (
+                                  <span>{product}</span>
+                                )}
+                              </li>
+                            );
+                          })}
                         </ul>
                       </div>
                     ))}
@@ -101,19 +125,37 @@ export function Header() {
 
           <div className="mobile-nav-group">
             <p className="eyebrow">Ore Solutions</p>
-            {oreSolutionGroups.map((group) => (
-              <Link key={group.title} href={group.href} onClick={() => setOpen(false)}>
-                {group.title}
-              </Link>
+            {oreProductGroups.map((group) => (
+              <div className="mobile-nav-subgroup" key={group.title}>
+                <Link href={group.href} onClick={() => setOpen(false)}>
+                  {group.title}
+                </Link>
+                {group.products.map((ore) => (
+                  <Link className="mobile-nav-child" key={ore.slug} href={`/ore-solutions/${ore.slug}`} onClick={() => setOpen(false)}>
+                    {ore.shortTitle}
+                  </Link>
+                ))}
+              </div>
             ))}
           </div>
 
           <div className="mobile-nav-group">
             <p className="eyebrow">Equipment Center</p>
             {equipmentGroups.map((group) => (
-              <Link key={group.title} href={group.href} onClick={() => setOpen(false)}>
-                {group.title}
-              </Link>
+              <div className="mobile-nav-subgroup" key={group.title}>
+                <Link href={group.href} onClick={() => setOpen(false)}>
+                  {group.title}
+                </Link>
+                {group.items.slice(0, 4).map((item) => {
+                  const equipmentProduct = getEquipmentProductByTitle(item);
+
+                  return equipmentProduct ? (
+                    <Link className="mobile-nav-child" key={item} href={`/equipment/${equipmentProduct.slug}`} onClick={() => setOpen(false)}>
+                      {item}
+                    </Link>
+                  ) : null;
+                })}
+              </div>
             ))}
           </div>
 

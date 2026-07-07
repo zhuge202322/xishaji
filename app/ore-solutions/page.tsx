@@ -3,7 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Beaker, CheckCircle2, FileText, MessageSquare, Send } from "lucide-react";
 import { VideoEvidence } from "@/components/TrustEvidence";
-import { company, oreSolutionGroups } from "@/data/site";
+import { oreProductGroups } from "@/data/ore-products";
+import { company } from "@/data/site";
 
 export const metadata: Metadata = {
   title: "Ore Solutions | VICMACH",
@@ -73,8 +74,8 @@ export default function OreSolutionsPage() {
               <p className="eyebrow">Mineral Categories</p>
               <h2>Choose by ore, then refine by test data</h2>
               <p>
-                The first route is built from the ore category. Final equipment selection follows
-                material testing, required grade, particle size, and site layout.
+                Each ore route now opens into a dedicated DOCX-backed detail page with source
+                descriptions, extracted images, process notes, and equipment discussion points.
               </p>
             </div>
             <Link className="text-link" href="/equipment">
@@ -83,21 +84,27 @@ export default function OreSolutionsPage() {
           </div>
 
           <div className="ore-solution-page-grid">
-            {oreSolutionGroups.map((group, index) => (
-              <article className="ore-solution-card" id={group.href.split("#")[1]} key={group.title}>
-                <span className="case-index">{String(index + 1).padStart(2, "0")}</span>
-                <h3>{group.title}</h3>
-                <p>{group.text}</p>
-                <div className="ore-chip-list">
-                  {group.ores.map((ore) => (
-                    <span key={ore}>{ore}</span>
-                  ))}
-                </div>
-                <Link href="/contact#inquiry-title">
-                  Send Ore Data <ArrowRight size={16} aria-hidden />
-                </Link>
-              </article>
-            ))}
+            {oreProductGroups.map((group, index) => {
+              const firstProduct = group.products[0];
+
+              return (
+                <article className="ore-solution-card" id={group.href.split("#")[1]} key={group.title}>
+                  <span className="case-index">{String(index + 1).padStart(2, "0")}</span>
+                  <h3>{group.title}</h3>
+                  <p>{group.text}</p>
+                  <div className="ore-chip-list">
+                    {group.products.map((ore) => (
+                      <Link href={`/ore-solutions/${ore.slug}`} key={ore.slug}>
+                        {ore.shortTitle}
+                      </Link>
+                    ))}
+                  </div>
+                  <Link href={firstProduct ? `/ore-solutions/${firstProduct.slug}` : "/contact#inquiry-title"}>
+                    View Ore Routes <ArrowRight size={16} aria-hidden />
+                  </Link>
+                </article>
+              );
+            })}
           </div>
         </div>
       </section>

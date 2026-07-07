@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, FileText, MessageSquare, Ruler, Send } from "lucide-react";
 import { CertificateEvidence, ManufacturingEvidence } from "@/components/TrustEvidence";
+import { getEquipmentProductByTitle } from "@/data/equipment-products";
 import { company, equipmentGroups } from "@/data/site";
 
 export const metadata: Metadata = {
@@ -96,11 +97,23 @@ export default function EquipmentPage() {
                 <h2>{group.title}</h2>
                 <p>{group.text}</p>
                 <ul className="equipment-model-list">
-                  {group.items.map((item) => (
-                    <li key={item}>
-                      <CheckCircle2 size={16} aria-hidden /> {item}
-                    </li>
-                  ))}
+                  {group.items.map((item) => {
+                    const equipmentProduct = getEquipmentProductByTitle(item);
+
+                    return (
+                      <li key={item}>
+                        <CheckCircle2 size={16} aria-hidden />
+                        {equipmentProduct ? (
+                          <Link className="equipment-model-link" href={`/equipment/${equipmentProduct.slug}`}>
+                            <span>{item}</span>
+                            <ArrowRight size={13} aria-hidden />
+                          </Link>
+                        ) : (
+                          <span>{item}</span>
+                        )}
+                      </li>
+                    );
+                  })}
                 </ul>
                 <div className="equipment-card-actions">
                   <Link href="/contact">

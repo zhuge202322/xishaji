@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Download, ExternalLink, PlayCircle } from "lucide-react";
+import { ArrowRight, Download, ExternalLink, PlayCircle, ShieldCheck } from "lucide-react";
 import {
   certificateFiles,
   gallerySections,
@@ -76,7 +76,7 @@ export function GalleryEvidence() {
         <SectionHeading
           eyebrow="Company Image Archive"
           title="Workshop, clients, and service team in view"
-          text="These are grouped from the company materials so visitors can quickly verify production scale, international cooperation, and daily support capability."
+          text="Real workshop, cooperation, and support-team records help buyers verify production scale, international experience, and daily service capability."
         />
         <div className="gallery-sections">
           {gallerySections.map((section) => (
@@ -101,6 +101,46 @@ export function GalleryEvidence() {
               </div>
             </article>
           ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function HomeEvidenceSummary() {
+  return (
+    <section className="section home-evidence-summary" id="trust-evidence">
+      <div className="container">
+        <div className="section-row">
+          <SectionHeading
+            eyebrow="Factory, Clients & Team"
+            title="Three views that verify who stands behind the equipment"
+            text="A concise selection of real production, cooperation, and engineering scenes gives buyers the proof they need without turning the homepage into a photo archive."
+          />
+          <Link className="text-link" href="/factory-visit">
+            Open full factory archive <ArrowRight size={16} aria-hidden />
+          </Link>
+        </div>
+        <div className="home-evidence-grid">
+          {gallerySections.map((section, index) => {
+            const image = section.items[0];
+
+            return (
+              <Link className="home-evidence-item" href="/factory-visit" key={section.title}>
+                <Image
+                  src={image.src}
+                  alt={image.alt}
+                  fill
+                  sizes="(max-width: 760px) 100vw, 33vw"
+                />
+                <span className="home-evidence-overlay">
+                  <small>{String(index + 1).padStart(2, "0")}</small>
+                  <strong>{section.title}</strong>
+                  <p>{section.text}</p>
+                </span>
+              </Link>
+            );
+          })}
         </div>
       </div>
     </section>
@@ -153,7 +193,7 @@ export function CertificateEvidence() {
         <SectionHeading
           eyebrow="Certificates & Qualification Files"
           title="Downloadable proof for procurement review"
-          text="Show qualification files directly on the website so procurement teams can verify company capability, product compliance, and line-level certification without waiting for email attachments."
+          text="Procurement teams can review company capability, product compliance, and line-level certification before technical and commercial confirmation."
         />
         <div className="certificate-grid">
           {certificateFiles.map((item) => (
@@ -181,6 +221,39 @@ export function CertificateEvidence() {
                 </div>
               </div>
             </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function CompactCertificateEvidence() {
+  return (
+    <section className="section compact-certificate-evidence" id="certificates">
+      <div className="container compact-certificate-layout">
+        <div className="compact-certificate-copy">
+          <ShieldCheck size={32} aria-hidden />
+          <p className="eyebrow">Patents & Procurement Files</p>
+          <h2><span>25+</span> patents supporting equipment and process innovation</h2>
+          <p>
+            Patent records lead the company qualification portfolio, supported by high-tech enterprise
+            recognition and CE files for product and mineral-processing line review.
+          </p>
+          <Link className="text-link" href="/about/honors#certificates">
+            Review qualification archive <ArrowRight size={16} aria-hidden />
+          </Link>
+        </div>
+        <div className="compact-certificate-files">
+          {certificateFiles.map((item) => (
+            <Link key={item.pdf} href={item.pdf} target="_blank" rel="noreferrer">
+              <Image src={item.thumbnail} alt={`${item.title} preview`} width={108} height={144} />
+              <span>
+                <small>{item.category}</small>
+                <strong>{item.title}</strong>
+                <b>View PDF <ExternalLink size={13} aria-hidden /></b>
+              </span>
+            </Link>
           ))}
         </div>
       </div>

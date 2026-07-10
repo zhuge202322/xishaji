@@ -21,8 +21,9 @@ import {
 export const company = {
   brand: "VICMACH",
   legalName: "Henan Victory Machinery Co., Ltd.",
-  cnName: "Henan Yingpai Intelligent Equipment Co., Ltd.",
+  cnName: "河南赢牌智能装备有限公司",
   indonesiaName: "PT. HEAVY VICMACH MACHINERY",
+  vietnamName: "VICMACH Vietnam Branch",
   phone: "+86 137 0088 2178",
   email: "vicmach2019@gmail.com",
   headquarters: "No.16, Industrial Road, Erqi District, Zhengzhou, Henan, China",
@@ -33,6 +34,32 @@ export const company = {
   patents: "25+",
   projects: "100+"
 };
+
+export const globalOffices = [
+  {
+    label: "China Headquarters",
+    name: company.legalName,
+    address: company.headquarters
+  },
+  {
+    label: "Indonesia Branch",
+    name: company.indonesiaName,
+    address: company.indonesiaOffice
+  },
+  {
+    label: "Vietnam Branch",
+    name: company.vietnamName,
+    address: company.vietnamOffice
+  }
+];
+
+export const socialChannels = [
+  { id: "tiktok", label: "TikTok", href: "/contact" },
+  { id: "douyin", label: "Douyin", href: "/contact" },
+  { id: "wechat", label: "WeChat Channels", href: "/contact" },
+  { id: "facebook", label: "Facebook", href: "/contact" },
+  { id: "youtube", label: "YouTube", href: "/contact" }
+];
 
 export const navItems = [
   { label: "Home", href: "/" },

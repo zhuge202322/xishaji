@@ -1,130 +1,133 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Award, BadgeCheck, Building2, Globe2 } from "lucide-react";
-import { SectionHeading } from "@/components/SectionHeading";
-import { CertificateEvidence, GalleryEvidence, TrustProofGrid } from "@/components/TrustEvidence";
-import { certifications, company, timeline } from "@/data/site";
+import {
+  ArrowRight,
+  Award,
+  Building2,
+  Factory,
+  HeartHandshake,
+  History,
+  Lightbulb,
+  ShieldCheck
+} from "lucide-react";
+import { AboutHero } from "@/components/AboutHero";
+import { company } from "@/data/site";
 
 export const metadata: Metadata = {
-  title: "About VICMACH | Henan Victory Machinery",
+  title: "About VICMACH | Company Profile, History & Credentials",
   description:
-    "Learn about Henan Victory Machinery Co., Ltd., the VICMACH brand, company history, qualifications, and global service presence."
+    "Explore VICMACH company profile, development history, honors, patents, culture, factory evidence, and downloadable qualification files."
 };
+
+const sections = [
+  {
+    eyebrow: "Who We Are",
+    title: "Company Profile",
+    text: "Manufacturing scope, engineering capability, global offices, and the team behind complete mining process delivery.",
+    href: "/about/profile",
+    image: "/images/factory-gate.webp",
+    icon: Building2
+  },
+  {
+    eyebrow: "2010 to Today",
+    title: "Our History",
+    text: "Follow the technical foundation, independent VICMACH launch, qualification growth, and full-line EPC development.",
+    href: "/about/history",
+    image: "/images/workshop-line.webp",
+    icon: History
+  },
+  {
+    eyebrow: "Procurement Proof",
+    title: "Honors & Certificates",
+    text: "Open company qualifications, product certificates, and line-level CE files directly in the website.",
+    href: "/about/honors",
+    image: "/images/certificates/system-high-tech-certificate.webp",
+    icon: Award
+  },
+  {
+    eyebrow: "Technical Development",
+    title: "Patents & R&D",
+    text: "Review the R&D focus behind 25+ national patents and the process equipment portfolio they support.",
+    href: "/about/patents",
+    image: "/images/product-inspection.webp",
+    icon: Lightbulb
+  },
+  {
+    eyebrow: "How We Work",
+    title: "Company Culture",
+    text: "Meet the production, engineering, export, and reception teams that keep international projects moving.",
+    href: "/about/culture",
+    image: "/images/service-team.webp",
+    icon: HeartHandshake
+  }
+];
 
 export default function AboutPage() {
   return (
     <main>
-      <section className="simple-hero about-hero">
-        <div className="container split-layout">
+      <AboutHero
+        current="/about"
+        eyebrow="About VICMACH"
+        title="Manufacturing strength, organized for clear verification"
+        text={`${company.legalName} brings company background, development records, qualification files, patents, and real team evidence into a structured company center.`}
+        image="/images/workshop-wide.webp"
+        imageAlt="VICMACH manufacturing workshop with heavy mining equipment"
+      />
+
+      <section className="section about-overview-section">
+        <div className="container about-overview-intro">
           <div>
-            <p className="eyebrow">About VICMACH</p>
-            <h1>Pioneering Intelligent Mining Equipment</h1>
+            <p className="eyebrow">Company Center</p>
+            <h2>Start with the evidence your team needs</h2>
+          </div>
+          <p>
+            Each company subject has its own focused page, so procurement and engineering visitors can
+            verify the relevant information without working through one long, repetitive company page.
+          </p>
+        </div>
+        <div className="container about-directory-grid">
+          {sections.map((item) => {
+            const Icon = item.icon;
+            return (
+              <Link className="about-directory-card" href={item.href} key={item.href}>
+                <Image src={item.image} alt="" fill sizes="(max-width: 760px) 100vw, 33vw" />
+                <span className="about-directory-shade" />
+                <span className="about-directory-content">
+                  <Icon size={24} aria-hidden />
+                  <small>{item.eyebrow}</small>
+                  <strong>{item.title}</strong>
+                  <p>{item.text}</p>
+                  <b>Open section <ArrowRight size={15} aria-hidden /></b>
+                </span>
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+
+      <section className="about-strength-band">
+        <Image src="/images/gallery/workshop-assembly-03.webp" alt="" fill sizes="100vw" />
+        <div className="about-strength-shade" />
+        <div className="container about-strength-layout">
+          <div>
+            <p className="eyebrow">Visible Manufacturing Base</p>
+            <h2>Real equipment, real workshop, reviewable files</h2>
             <p>
-              {company.legalName} is a national high-tech enterprise integrating R&D,
-              production, and global sales for heavy mining machinery and complete EPC lines.
+              Company claims are supported by production-floor media, customer cooperation records,
+              downloadable qualification files, and a direct path to factory visits and technical review.
             </p>
           </div>
-          <Image
-            src="/images/factory-gate.webp"
-            alt="VICMACH manufacturing base entrance"
-            width={720}
-            height={470}
-            priority
-          />
-        </div>
-      </section>
-
-      <section className="section">
-        <div className="container split-layout">
-          <div>
-            <SectionHeading
-              eyebrow="Company Profile"
-              title="A manufacturer built for complete mining process delivery"
-              text="Founded independently in 2019, VICMACH focuses on large and medium-sized mining machinery crushing equipment while expanding across sand making, beneficiation, grinding, building materials, washing, and solid waste recycling equipment."
-            />
-            <p className="large-copy">
-              With 25+ national patents, a technical team rooted in mining process equipment,
-              and more than 100 full-chain project service references, VICMACH provides both
-              high-quality single machines and complete production line output.
-            </p>
-          </div>
-          <div className="about-facts">
-            <div>
-              <Building2 size={28} aria-hidden />
-              <strong>{company.headquarters}</strong>
-              <span>China Headquarters</span>
-            </div>
-            <div>
-              <Award size={28} aria-hidden />
-              <strong>{company.patents}</strong>
-              <span>National patents</span>
-            </div>
-            <div>
-              <Globe2 size={28} aria-hidden />
-              <strong>{company.projects}</strong>
-              <span>Mining service projects</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="section section-muted">
-        <div className="container">
-          <SectionHeading
-            eyebrow="Trust Signals"
-            title="Company capability shown with real evidence"
-            text="The about page now gives procurement visitors direct proof points before they enter an inquiry conversation."
-          />
-          <TrustProofGrid />
-        </div>
-      </section>
-
-      <section className="section section-muted">
-        <div className="container">
-          <SectionHeading align="center" eyebrow="Milestones" title="A Decade of Progress" />
-          <div className="timeline-grid">
-            {timeline.map((item) => (
-              <article key={`${item.year}-${item.title}`}>
-                <span>{item.year}</span>
-                <h2>{item.title}</h2>
-                <p>{item.text}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="section">
-        <div className="container">
-          <SectionHeading
-            eyebrow="Honor & Certificates"
-            title="Credentials that support international project confidence"
-          />
-          <div className="cert-grid">
-            {certifications.map((item) => (
-              <article key={item.title}>
-                <BadgeCheck size={28} aria-hidden />
-                <h2>{item.title}</h2>
-                <p>{item.text}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <CertificateEvidence />
-      <GalleryEvidence />
-
-      <section className="section cta-panel-section">
-        <div className="container cta-panel">
-          <div>
-            <p className="eyebrow">Global Cooperation</p>
-            <h2>Visit the factory or start a technical review.</h2>
-            <p>Meet the team in Zhengzhou, review equipment on the production floor, or send your site data online.</p>
+          <div className="about-strength-stats">
+            <span><strong>{company.patents}</strong> National patents</span>
+            <span><strong>{company.projects}</strong> Project references</span>
+            <span><strong>3</strong> Regional offices</span>
           </div>
           <Link className="button button-primary" href="/factory-visit">
-            Plan a Visit <ArrowRight size={18} aria-hidden />
+            View Factory Evidence <Factory size={18} aria-hidden />
+          </Link>
+          <Link className="button button-ghost-dark" href="/about/honors">
+            Review Certificates <ShieldCheck size={18} aria-hidden />
           </Link>
         </div>
       </section>

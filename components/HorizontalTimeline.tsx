@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef, type KeyboardEvent, type PointerEvent } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { SectionHeading } from "./SectionHeading";
 
 const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
@@ -20,97 +21,135 @@ type HorizontalTimelineProps = {
 export function HorizontalTimeline({ items }: HorizontalTimelineProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
+  const dragRef = useRef({ active: false, startX: 0, scrollLeft: 0 });
 
   useIsomorphicLayoutEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduceMotion || !sectionRef.current || !viewportRef.current || !trackRef.current) {
+    if (reduceMotion || !sectionRef.current || !viewportRef.current) {
       return;
     }
 
     const context = gsap.context(() => {
-      const matchMedia = gsap.matchMedia();
-
-      matchMedia.add("(min-width: 768px)", () => {
-        const section = sectionRef.current;
-        const viewport = viewportRef.current;
-        const track = trackRef.current;
-
-        if (!section || !viewport || !track) {
-          return undefined;
+      gsap.from(".decade-card", {
+        y: 32,
+        opacity: 0,
+        rotateX: 4,
+        transformOrigin: "center bottom",
+        duration: 0.72,
+        stagger: 0.06,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: viewportRef.current,
+          start: "top 82%",
+          once: true
         }
-
-        const getDistance = () => Math.max(0, track.scrollWidth - viewport.clientWidth);
-
-        gsap.set(track, { x: 0 });
-
-        const tween = gsap.to(track, {
-          x: () => -getDistance(),
-          ease: "none",
-          scrollTrigger: {
-            trigger: section,
-            start: "top top",
-            end: () => `+=${getDistance() + window.innerHeight * 0.45}`,
-            pin: true,
-            scrub: 0.8,
-            anticipatePin: 1,
-            invalidateOnRefresh: true
-          }
-        });
-
-        gsap.from(".decade-card", {
-          y: 36,
-          opacity: 0,
-          rotateX: 6,
-          transformOrigin: "center bottom",
-          duration: 0.8,
-          stagger: 0.07,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: viewport,
-            start: "top 72%"
-          }
-        });
-
-        return () => {
-          tween.scrollTrigger?.kill();
-          tween.kill();
-        };
       });
-
-      matchMedia.add("(max-width: 767px)", () => {
-        gsap.from(".decade-card", {
-          y: 28,
-          opacity: 0,
-          duration: 0.65,
-          stagger: 0.06,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: viewportRef.current,
-            start: "top 80%"
-          }
-        });
-      });
-
-      return () => matchMedia.revert();
     }, sectionRef);
 
     return () => context.revert();
   }, [items.length]);
 
+  function scrollTimeline(direction: -1 | 1) {
+    const viewport = viewportRef.current;
+    if (!viewport) return;
+
+    viewport.scrollBy({
+      left: direction * Math.min(viewport.clientWidth * 0.78, 520),
+      behavior: "smooth"
+    });
+  }
+
+  function handlePointerDown(event: PointerEvent<HTMLDivElement>) {
+    if (event.button !== 0 || event.pointerType !== "mouse") return;
+
+    const viewport = event.currentTarget;
+    dragRef.current = {
+      active: true,
+      startX: event.clientX,
+      scrollLeft: viewport.scrollLeft
+    };
+    viewport.setPointerCapture(event.pointerId);
+    viewport.classList.add("is-dragging");
+  }
+
+  function handlePointerMove(event: PointerEvent<HTMLDivElement>) {
+    if (!dragRef.current.active || event.pointerType !== "mouse") return;
+
+    event.currentTarget.scrollLeft = dragRef.current.scrollLeft - (event.clientX - dragRef.current.startX);
+  }
+
+  function stopDragging(event: PointerEvent<HTMLDivElement>) {
+    if (!dragRef.current.active) return;
+
+    dragRef.current.active = false;
+    event.currentTarget.classList.remove("is-dragging");
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+  }
+
+  function handleKeyDown(event: KeyboardEvent<HTMLDivElement>) {
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      scrollTimeline(-1);
+    }
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      scrollTimeline(1);
+    }
+  }
+
   return (
     <section className="section decade-section" ref={sectionRef}>
-      <div className="container">
+      <div className="container decade-header">
         <SectionHeading
-          align="center"
           eyebrow="A Decade of Progress"
           title="From Mining Machinery Roots to Global EPC Delivery"
         />
+        <div className="decade-controls" aria-label="Timeline controls">
+          <button
+            type="button"
+            onPointerDown={(event) => {
+              event.preventDefault();
+              scrollTimeline(-1);
+            }}
+            onClick={(event) => {
+              if (event.detail === 0) scrollTimeline(-1);
+            }}
+            aria-label="Scroll timeline left"
+          >
+            <ChevronLeft size={20} aria-hidden />
+          </button>
+          <button
+            type="button"
+            onPointerDown={(event) => {
+              event.preventDefault();
+              scrollTimeline(1);
+            }}
+            onClick={(event) => {
+              if (event.detail === 0) scrollTimeline(1);
+            }}
+            aria-label="Scroll timeline right"
+          >
+            <ChevronRight size={20} aria-hidden />
+          </button>
+        </div>
       </div>
-      <div className="decade-viewport" ref={viewportRef}>
-        <div className="decade-track" ref={trackRef}>
+      <div
+        className="decade-viewport"
+        ref={viewportRef}
+        role="region"
+        aria-label="VICMACH company timeline"
+        tabIndex={0}
+        onKeyDown={handleKeyDown}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={stopDragging}
+        onPointerCancel={stopDragging}
+      >
+        <div className="decade-track">
           {items.map((item, index) => (
             <article className="decade-card" key={`${item.year}-${item.title}`}>
               <span className="decade-index">{String(index + 1).padStart(2, "0")}</span>

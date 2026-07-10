@@ -31,6 +31,7 @@ export default function ContactPage() {
             <div className="contact-card primary-contact">
               <p className="eyebrow">China Headquarters</p>
               <h2>{company.legalName}</h2>
+              <p className="contact-local-name">{company.cnName}</p>
               <p>{company.headquarters}</p>
               <a href={`tel:${company.phone.replaceAll(" ", "")}`}>
                 <Phone size={18} aria-hidden /> {company.phone}
@@ -48,7 +49,7 @@ export default function ContactPage() {
               </div>
               <div className="contact-card">
                 <p className="eyebrow">Vietnam Office</p>
-                <h3>Vietnamese Branch</h3>
+                <h3>{company.vietnamName}</h3>
                 <p>{company.vietnamOffice}</p>
               </div>
             </div>

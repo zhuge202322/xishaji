@@ -19,13 +19,20 @@ import {
 import { SectionHeading } from "@/components/SectionHeading";
 import { HorizontalTimeline } from "@/components/HorizontalTimeline";
 import {
-  CertificateEvidence,
-  GalleryEvidence,
-  ManufacturingEvidence,
-  TrustProofGrid,
-  VideoEvidence
+  CompactCertificateEvidence,
+  HomeEvidenceSummary,
+  TrustProofGrid
 } from "@/components/TrustEvidence";
-import { categories, company, equipmentGroups, oreSolutionGroups, projects, stats, timeline } from "@/data/site";
+import { categories, company, equipmentGroups, globalOffices, oreSolutionGroups, projects, stats, timeline } from "@/data/site";
+
+const equipmentCategoryImages = [
+  "/images/workshop-wide.webp",
+  "/images/grinding-equipment.webp",
+  "/images/product-inspection.webp",
+  "/images/gallery/workshop-assembly-03.webp",
+  "/images/workshop-line.webp",
+  "/images/washing-equipment.webp"
+];
 
 export default function HomePage() {
   const whatsappHref = `https://wa.me/${company.phone.replace(/\D/g, "")}`;
@@ -111,10 +118,10 @@ export default function HomePage() {
           </div>
           <div className="authority-content">
             <p className="eyebrow">Manufacturing Scale</p>
-            <h2>Built for buyers who need visible capacity, not brochure promises.</h2>
+            <h2>Built for buyers who need visible manufacturing capacity.</h2>
             <p>
-              The website now brings factory floors, cooperation records, videos, and downloadable
-              qualifications forward so overseas procurement teams can judge supplier strength before inquiry.
+              Real workshop floors, client cooperation records, qualification files, and engineering
+              handoff materials let overseas procurement teams evaluate manufacturing capacity before inquiry.
             </p>
             <div className="authority-proof-grid">
               <div>
@@ -150,7 +157,7 @@ export default function HomePage() {
           <SectionHeading
             eyebrow="Why Buyers Trust VICMACH"
             title="Evidence before quotation"
-            text="International procurement teams need visible proof: certified documents, real factory photos, process accountability, and cooperation records. These signals are built into the website instead of hidden in a brochure."
+            text="International procurement teams can review certified documents, real factory photos, process accountability, and cooperation records before moving into technical and commercial discussion."
           />
           <TrustProofGrid />
         </div>
@@ -192,30 +199,33 @@ export default function HomePage() {
           <div className="section-row">
             <SectionHeading
               eyebrow="Equipment Center"
-              title="Specific machines for every stage of the plant"
-              text="The equipment center is organized around the process chain from crushing and grinding to separation, dewatering, conveying, and wet washing."
+              title="Six equipment families across the complete process chain"
+              text="Start with the process stage, then open the category for individual product descriptions, images, and technical parameters."
             />
             <Link className="text-link" href="/equipment">
               View Equipment Center <ArrowRight size={16} aria-hidden />
             </Link>
           </div>
           <div className="equipment-directory-grid">
-            {equipmentGroups.map((group) => (
-              <article className="equipment-directory-card" key={group.title}>
-                <div>
+            {equipmentGroups.map((group, index) => (
+              <Link className="equipment-directory-card" href={group.href} key={group.title}>
+                <div className="equipment-directory-media">
+                  <Image
+                    src={equipmentCategoryImages[index] ?? "/images/workshop-line.webp"}
+                    alt={`${group.title} representative equipment`}
+                    fill
+                    sizes="(max-width: 760px) 100vw, 33vw"
+                  />
+                </div>
+                <div className="equipment-directory-body">
                   <p className="eyebrow">{String(group.items.length).padStart(2, "0")} models</p>
                   <h3>{group.title}</h3>
                   <p>{group.text}</p>
+                  <span>
+                    Explore Category <ArrowRight size={16} aria-hidden />
+                  </span>
                 </div>
-                <ul>
-                  {group.items.slice(0, 7).map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-                <Link href={group.href}>
-                  Explore Category <ArrowRight size={16} aria-hidden />
-                </Link>
-              </article>
+              </Link>
             ))}
           </div>
           <div className="conversion-mini-band">
@@ -325,62 +335,99 @@ export default function HomePage() {
           </div>
           <div>
             <Building2 size={26} aria-hidden />
-            <strong>Factory Archive</strong>
-            <span>Workshop, reception, video, and certificate evidence</span>
+            <strong>Verification Archive</strong>
+            <span>Factory, cooperation, qualification, and project records</span>
           </div>
         </div>
       </section>
 
-      <ManufacturingEvidence />
-      <GalleryEvidence />
-      <VideoEvidence />
-      <CertificateEvidence />
+      <HomeEvidenceSummary />
+
+      <section className="section home-project-showcase">
+        <Image
+          className="project-showcase-background"
+          src="/images/factory-aerial.webp"
+          alt=""
+          fill
+          sizes="100vw"
+        />
+        <div className="project-showcase-shade" />
+        <div className="container project-showcase-layout">
+          <div className="project-showcase-copy">
+            <p className="eyebrow">Project References</p>
+            <h2>Start with your material, output target, and site constraints</h2>
+            <p>
+              VICMACH develops practical routes around feed properties, required capacity, final product,
+              utilities, and installation conditions, then connects equipment supply with commissioning support.
+            </p>
+            <ul>
+              <li>Material and feed-size review</li>
+              <li>Capacity and finished-product target</li>
+              <li>Process flow and equipment matching</li>
+              <li>Installation, training, and parts planning</li>
+            </ul>
+            <Link className="button button-primary" href="/projects">
+              Review Project Cases <ArrowRight size={18} aria-hidden />
+            </Link>
+          </div>
+          <div className="project-showcase-grid">
+            {projects.map((project) => (
+              <Link className="project-showcase-card" href="/projects" key={project.title}>
+                <Image src={project.image} alt={project.title} fill sizes="(max-width: 760px) 100vw, 25vw" />
+                <span>
+                  <small>{project.location}</small>
+                  <h3>{project.title}</h3>
+                  <p>{project.scope}</p>
+                </span>
+              </Link>
+            ))}
+            <Link className="project-showcase-card project-showcase-cta" href="/contact#inquiry-title">
+              <Image
+                src="/images/engineering-meeting.webp"
+                alt="VICMACH engineers reviewing project documents"
+                fill
+                sizes="(max-width: 760px) 100vw, 25vw"
+              />
+              <ClipboardCheck size={28} aria-hidden />
+              <span>
+                <small>Your Project</small>
+                <h3>Send site data for an engineered route</h3>
+                <b>Start technical review <ArrowRight size={15} aria-hidden /></b>
+              </span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <CompactCertificateEvidence />
 
       <HorizontalTimeline items={timeline} />
 
-      <section className="section section-muted">
+      <section className="section contact-strip global-contact-strip">
         <div className="container">
-          <div className="section-row">
-            <SectionHeading
-              eyebrow="Global Projects"
-              title="Project cases built around measurable output"
-              text="VICMACH focuses on practical process routes: raw material in, stable finished product out, and supportable operations after commissioning."
-            />
-            <Link className="text-link" href="/projects">
-              View all cases <ArrowRight size={16} aria-hidden />
-            </Link>
+          <div className="global-contact-heading">
+            <p className="eyebrow">Start Your Project</p>
+            <h2>Send material, capacity, and site details for a tailored recommendation.</h2>
+            <div className="global-contact-direct">
+              <a href={`tel:${company.phone.replaceAll(" ", "")}`}>
+                <Phone size={18} aria-hidden /> {company.phone}
+              </a>
+              <a href={`mailto:${company.email}`}>
+                <Mail size={18} aria-hidden /> {company.email}
+              </a>
+            </div>
           </div>
-          <div className="project-grid">
-            {projects.map((project) => (
-              <article className="project-card" key={project.title}>
-                <Image src={project.image} alt={project.title} width={640} height={420} />
+          <div className="global-contact-grid">
+            {globalOffices.map((office) => (
+              <article key={office.label}>
+                <MapPin size={20} aria-hidden />
                 <div>
-                  <p className="eyebrow">{project.location}</p>
-                  <h3>{project.title}</h3>
-                  <p>{project.scope}</p>
+                  <p className="eyebrow">{office.label}</p>
+                  <h3>{office.name}</h3>
+                  <p>{office.address}</p>
                 </div>
               </article>
             ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="section contact-strip">
-        <div className="container contact-strip-grid">
-          <div>
-            <p className="eyebrow">Start Your Project</p>
-            <h2>Send material, capacity, and site details for a tailored recommendation.</h2>
-          </div>
-          <div className="contact-methods">
-            <a href={`tel:${company.phone.replaceAll(" ", "")}`}>
-              <Phone size={20} aria-hidden /> {company.phone}
-            </a>
-            <a href={`mailto:${company.email}`}>
-              <Mail size={20} aria-hidden /> {company.email}
-            </a>
-            <span>
-              <MapPin size={20} aria-hidden /> Zhengzhou, Henan, China
-            </span>
           </div>
         </div>
       </section>

@@ -18,12 +18,13 @@ import {
 } from "lucide-react";
 import { SectionHeading } from "@/components/SectionHeading";
 import { HorizontalTimeline } from "@/components/HorizontalTimeline";
+import { HomeHero } from "@/components/HomeHero";
 import {
   CompactCertificateEvidence,
   HomeEvidenceSummary,
   TrustProofGrid
 } from "@/components/TrustEvidence";
-import { categories, company, equipmentGroups, globalOffices, oreSolutionGroups, projects, stats, timeline } from "@/data/site";
+import { categories, company, equipmentGroups, globalOffices, oreSolutionGroups, projects, timeline } from "@/data/site";
 
 const equipmentCategoryImages = [
   "/images/workshop-wide.webp",
@@ -39,115 +40,82 @@ export default function HomePage() {
 
   return (
     <main>
-      <section className="home-hero">
-        <Image
-          src="/images/hero-factory.webp"
-          alt="VICMACH heavy machinery manufacturing workshop"
-          fill
-          priority
-          sizes="100vw"
-        />
-        <div className="home-hero-overlay" />
-        <div className="container home-hero-content">
-          <div className="hero-copy">
-            <p className="eyebrow">Industrial precision for global mining projects</p>
-            <h1 aria-label="Advanced Crushing & Mineral Processing Solutions">
-              <span>Advanced Crushing &</span>
-              <span>Mineral Processing</span>
-              <span>Solutions</span>
-            </h1>
-            <p>
-              VICMACH manufactures heavy-duty equipment and complete EPC production lines
-              for sand making, crushing, beneficiation, grinding, building materials, and washing systems.
-            </p>
-            <div className="hero-actions">
-              <Link className="button button-primary" href="/contact">
-                Start Your Project <ArrowRight size={18} aria-hidden />
-              </Link>
-              <Link className="button button-ghost-dark" href="#solutions">
-                Explore Solutions
-              </Link>
-            </div>
-          </div>
-          <aside className="hero-command-panel" aria-label="VICMACH manufacturing proof">
-            <div>
-              <span>01</span>
-              <strong>Manufacturer Direct</strong>
-              <p>R&D, production, sales, installation, and commissioning aligned under one team.</p>
-            </div>
-            <div>
-              <span>02</span>
-              <strong>EPC Line Delivery</strong>
-              <p>Crushing, sand washing, mineral processing, grinding, and environmental recovery.</p>
-            </div>
-            <div>
-              <span>03</span>
-              <strong>Procurement Proof</strong>
-              <p>Factory media, certificates, patents, and project records prepared for review.</p>
-            </div>
-          </aside>
-        </div>
-        <div className="hero-signal-row" aria-hidden>
-          <span>Heavy Equipment Manufacturing</span>
-          <span>Turnkey EPC Systems</span>
-          <span>Certified Export Support</span>
-        </div>
-        <div className="hero-data-strip">
-          {stats.map((item) => (
-            <div key={item.label}>
-              <strong>{item.value}</strong>
-              <span>{item.label}</span>
-            </div>
-          ))}
-        </div>
-      </section>
+      <HomeHero />
 
       <section className="section industrial-authority">
-        <div className="container authority-shell">
-          <div className="authority-media">
-            <Image
-              src="/images/workshop-wide.webp"
-              alt="Wide VICMACH workshop with heavy mining machinery under production"
-              fill
-              sizes="(max-width: 900px) 100vw, 58vw"
-            />
-            <div className="authority-media-caption">
-              <span>Manufacturing Base</span>
-              <strong>Zhengzhou, Henan</strong>
+        <div className="container">
+          <div className="authority-heading">
+            <div className="section-heading">
+              <p className="eyebrow">Manufacturing Scale</p>
+              <h2>Manufacturing capacity buyers can see and verify.</h2>
+            </div>
+            <div className="authority-intro-copy">
+              <span>Direct manufacturer / Zhengzhou, China</span>
+              <p>
+                Real workshop floors, client cooperation records, qualification files, and engineering
+                handoff materials let overseas procurement teams evaluate manufacturing capacity before inquiry.
+              </p>
             </div>
           </div>
-          <div className="authority-content">
-            <p className="eyebrow">Manufacturing Scale</p>
-            <h2>Built for buyers who need visible manufacturing capacity.</h2>
-            <p>
-              Real workshop floors, client cooperation records, qualification files, and engineering
-              handoff materials let overseas procurement teams evaluate manufacturing capacity before inquiry.
-            </p>
-            <div className="authority-proof-grid">
-              <div>
-                <Factory size={24} aria-hidden />
-                <strong>Factory Floor</strong>
-                <span>Real workshop and assembly images</span>
-              </div>
-              <div>
-                <BadgeCheck size={24} aria-hidden />
-                <strong>Certified Files</strong>
-                <span>High-tech, CE, and line-level PDFs</span>
-              </div>
-              <div>
-                <Globe2 size={24} aria-hidden />
-                <strong>Regional Reach</strong>
-                <span>China, Indonesia, and Vietnam support</span>
-              </div>
-              <div>
-                <ClipboardCheck size={24} aria-hidden />
-                <strong>Project Review</strong>
-                <span>Material, capacity, site, and process matching</span>
+
+          <div className="authority-stage">
+            <div className="authority-media">
+              <Image
+                src="/images/manufacturing-scale.png"
+                alt="VICMACH technicians inspecting a large ball mill on the manufacturing floor"
+                fill
+                sizes="(max-width: 900px) 100vw, 64vw"
+              />
+              <div className="authority-media-caption">
+                <span>Manufacturing Base</span>
+                <strong>Zhengzhou, Henan</strong>
+                <small>Heavy equipment assembly and production floor</small>
               </div>
             </div>
-            <Link className="button button-primary" href="/factory-visit">
-              Review Factory Evidence <ArrowRight size={18} aria-hidden />
-            </Link>
+
+            <div className="authority-evidence">
+              <div className="authority-evidence-heading">
+                <span>Factory Qualification</span>
+                <h3>Four proof points available for buyer review</h3>
+              </div>
+              <div className="authority-proof-list">
+                <div className="authority-proof-item">
+                  <span className="authority-proof-number">01</span>
+                  <Factory size={24} aria-hidden />
+                  <div>
+                    <strong>Factory Floor</strong>
+                    <span>Real workshop and assembly images</span>
+                  </div>
+                </div>
+                <div className="authority-proof-item">
+                  <span className="authority-proof-number">02</span>
+                  <BadgeCheck size={24} aria-hidden />
+                  <div>
+                    <strong>Certified Files</strong>
+                    <span>High-tech, CE, and line-level PDFs</span>
+                  </div>
+                </div>
+                <div className="authority-proof-item">
+                  <span className="authority-proof-number">03</span>
+                  <Globe2 size={24} aria-hidden />
+                  <div>
+                    <strong>Regional Reach</strong>
+                    <span>China, Indonesia, and Vietnam support</span>
+                  </div>
+                </div>
+                <div className="authority-proof-item">
+                  <span className="authority-proof-number">04</span>
+                  <ClipboardCheck size={24} aria-hidden />
+                  <div>
+                    <strong>Project Review</strong>
+                    <span>Material, capacity, site, and process matching</span>
+                  </div>
+                </div>
+              </div>
+              <Link className="button button-accent" href="/factory-visit">
+                Review Factory Evidence <ArrowRight size={18} aria-hidden />
+              </Link>
+            </div>
           </div>
         </div>
       </section>
@@ -174,17 +142,25 @@ export default function HomePage() {
             <span className="outline-word">PRECISION</span>
           </div>
           <div className="category-grid">
-            {categories.map((category) => {
+            {categories.map((category, index) => {
               const Icon = category.icon;
               return (
                 <Link className="category-card" href={category.href} key={category.title}>
-                  <Image src={category.image} alt="" fill sizes="(max-width: 768px) 100vw, 33vw" />
-                  <div className="category-card-content">
+                  <Image
+                    src={category.image}
+                    alt={`${category.title} equipment and production capability`}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1180px) 50vw, 42vw"
+                  />
+                  <div className="category-card-top">
+                    <span className="category-card-index">{String(index + 1).padStart(2, "0")}</span>
                     <Icon size={26} aria-hidden />
+                  </div>
+                  <div className="category-card-content">
                     <h3>{category.title}</h3>
                     <p>{category.text}</p>
                   </div>
-                  <span>
+                  <span className="category-card-link">
                     Learn More <ArrowRight size={16} aria-hidden />
                   </span>
                 </Link>
@@ -280,12 +256,17 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="section" id="epc">
-        <div className="container epc-layout">
-          <div className="epc-media">
-            <Image src="/images/factory-aerial.webp" alt="VICMACH manufacturing base aerial view" fill sizes="50vw" />
-          </div>
-          <div className="epc-card">
+      <section className="epc-experience" id="epc">
+        <Image
+          className="epc-background"
+          src="/images/hero-scenes/epc-delivery.webp"
+          alt="VICMACH complete aggregate production line delivered as an EPC project"
+          fill
+          sizes="100vw"
+        />
+        <div className="epc-shade" />
+        <div className="container epc-stage">
+          <div className="section-heading epc-copy">
             <p className="eyebrow">Turnkey Projects</p>
             <h2>Sand, washing, and mineral lines delivered as EPC packages</h2>
             <p>
@@ -293,20 +274,35 @@ export default function HomePage() {
               and operator training. The same team can deliver high-quality single machines or complete
               production lines.
             </p>
-            <ul className="check-list">
-              <li>
-                <CheckCircle2 size={18} aria-hidden /> Site-specific plant layout and process flow
-              </li>
-              <li>
-                <CheckCircle2 size={18} aria-hidden /> Integrated machinery, conveyors, screens, and water treatment
-              </li>
-              <li>
-                <CheckCircle2 size={18} aria-hidden /> Commissioning support with long-term parts planning
-              </li>
-            </ul>
-            <Link className="button button-secondary" href="/projects">
-              View Project Cases
+            <Link className="button button-accent" href="/projects">
+              View Project Cases <ArrowRight size={18} aria-hidden />
             </Link>
+          </div>
+          <div className="epc-process">
+            <div className="epc-process-item">
+              <span className="epc-process-number">01</span>
+              <CheckCircle2 size={22} aria-hidden />
+              <div>
+                <h3>Process Engineering</h3>
+                <p>Site-specific plant layout and process flow</p>
+              </div>
+            </div>
+            <div className="epc-process-item">
+              <span className="epc-process-number">02</span>
+              <CheckCircle2 size={22} aria-hidden />
+              <div>
+                <h3>System Integration</h3>
+                <p>Machinery, conveyors, screens, and water treatment</p>
+              </div>
+            </div>
+            <div className="epc-process-item">
+              <span className="epc-process-number">03</span>
+              <CheckCircle2 size={22} aria-hidden />
+              <div>
+                <h3>Commissioning Support</h3>
+                <p>On-site delivery, training, and long-term parts planning</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>

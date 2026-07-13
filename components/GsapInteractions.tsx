@@ -13,8 +13,8 @@ const cardSelector = [
   ".equipment-catalog-card",
   ".equipment-index a",
   ".hero-command-panel",
-  ".authority-shell",
-  ".authority-proof-grid div",
+  ".authority-stage",
+  ".authority-proof-item",
   ".trust-proof-grid article",
   ".capability-card",
   ".project-card",
@@ -51,7 +51,7 @@ const cardSelector = [
   ".visit-support-grid div",
   ".contact-card",
   ".form-panel",
-  ".epc-card"
+  ".epc-process-item"
 ].join(", ");
 
 export function GsapInteractions() {
@@ -122,19 +122,6 @@ export function GsapInteractions() {
               ease: "power3.out"
             });
           }
-        });
-      }
-
-      const heroDataItems = gsap.utils.toArray<HTMLElement>(".hero-data-strip div");
-
-      if (heroDataItems.length > 0) {
-        gsap.to(heroDataItems, {
-          y: -8,
-          duration: 1.4,
-          stagger: 0.15,
-          ease: "sine.inOut",
-          repeat: -1,
-          yoyo: true
         });
       }
 

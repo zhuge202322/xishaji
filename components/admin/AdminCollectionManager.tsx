@@ -44,6 +44,10 @@ function isPreviewableImage(value: string) {
   return value.startsWith("/") || value.startsWith("https://") || value.startsWith("http://");
 }
 
+function isPreviewableVideo(value: string) {
+  return /\.(mp4|webm|ogg)(\?.*)?$/i.test(value);
+}
+
 export function AdminCollectionManager({ config, initialRecords, storageMode }: Props) {
   const [records, setRecords] = useState(initialRecords);
   const [query, setQuery] = useState("");
@@ -142,7 +146,7 @@ export function AdminCollectionManager({ config, initialRecords, storageMode }: 
     }
   }
 
-  async function uploadImage(field: AdminField, file: File | undefined) {
+  async function uploadMedia(field: AdminField, file: File | undefined) {
     if (!file) return;
     setUploadingField(field.key);
     setMessage(null);
@@ -165,7 +169,8 @@ export function AdminCollectionManager({ config, initialRecords, storageMode }: 
     const value = formValues[field.key] ?? "";
     const inputId = `admin-field-${field.key}`;
     const update = (nextValue: string) => setFormValues((current) => ({ ...current, [field.key]: nextValue }));
-    const wide = field.type === "textarea" || field.type === "image";
+    const isMediaField = field.type === "image" || field.type === "media";
+    const wide = field.type === "textarea" || isMediaField;
 
     return (
       <div className={`admin-form-field ${wide ? "is-wide" : ""}`} key={field.key}>
@@ -176,24 +181,37 @@ export function AdminCollectionManager({ config, initialRecords, storageMode }: 
           <select id={inputId} value={value} required={field.required} onChange={(event) => update(event.target.value)}>
             {(field.options ?? []).map((option) => <option value={option.value} key={option.value}>{option.label}</option>)}
           </select>
-        ) : field.type === "image" ? (
+        ) : isMediaField ? (
           <div className="admin-image-field">
-            <div className={`admin-image-preview ${isPreviewableImage(value) ? "has-image" : ""}`} style={isPreviewableImage(value) ? { backgroundImage: `url(${JSON.stringify(value).slice(1, -1)})` } : undefined}>
-              {!isPreviewableImage(value) ? <><ImagePlus size={26} aria-hidden /><span>暂无图片</span></> : null}
-            </div>
+            {field.type === "media" && isPreviewableVideo(value) ? (
+              <div className="admin-image-preview has-image">
+                <video src={value} muted playsInline controls preload="metadata" />
+              </div>
+            ) : (
+              <div className={`admin-image-preview ${isPreviewableImage(value) ? "has-image" : ""}`} style={isPreviewableImage(value) ? { backgroundImage: `url(${JSON.stringify(value).slice(1, -1)})` } : undefined}>
+                {!isPreviewableImage(value) ? <><ImagePlus size={26} aria-hidden /><span>{field.type === "media" ? "暂无媒体" : "暂无图片"}</span></> : null}
+              </div>
+            )}
             <div>
-              <input id={inputId} type="text" value={value} required={field.required} placeholder="图片 URL 或 /images 路径" onChange={(event) => update(event.target.value)} />
+              <input
+                id={inputId}
+                type="text"
+                value={value}
+                required={field.required}
+                placeholder={field.type === "media" ? "媒体 URL 或 /images、/videos 路径" : "图片 URL 或 /images 路径"}
+                onChange={(event) => update(event.target.value)}
+              />
               <label className="admin-upload-button" htmlFor={`${inputId}-upload`}>
                 {uploadingField === field.key ? <LoaderCircle className="admin-spin" size={17} aria-hidden /> : <Upload size={17} aria-hidden />}
-                {uploadingField === field.key ? "正在上传" : "上传图片"}
+                {uploadingField === field.key ? "正在上传" : field.type === "media" ? "上传媒体" : "上传图片"}
               </label>
               <input
                 className="admin-file-input"
                 id={`${inputId}-upload`}
                 type="file"
-                accept="image/*"
+                accept={field.type === "media" ? "image/*,video/mp4,video/webm,video/ogg" : "image/*"}
                 disabled={uploadingField === field.key}
-                onChange={(event) => uploadImage(field, event.target.files?.[0])}
+                onChange={(event) => uploadMedia(field, event.target.files?.[0])}
               />
             </div>
           </div>

@@ -32,7 +32,7 @@ export type CmsRecordInput = {
   data: CmsRecordData;
 };
 
-export type AdminFieldType = "text" | "textarea" | "url" | "image" | "date" | "number" | "select";
+export type AdminFieldType = "text" | "textarea" | "url" | "image" | "media" | "date" | "number" | "select";
 
 export type AdminField = {
   key: string;

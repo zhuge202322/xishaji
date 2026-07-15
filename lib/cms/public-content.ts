@@ -76,6 +76,15 @@ function parseRelatedLinks(input: unknown) {
   });
 }
 
+function isUnsafeProductionUploadUrl(url: string) {
+  return Boolean(process.env.VERCEL && url.startsWith("/uploads/"));
+}
+
+function mediaValue(record: CmsRecord, key: string, fallback = "") {
+  const current = value(record, key, fallback);
+  return isUnsafeProductionUploadUrl(current) ? fallback : current;
+}
+
 export async function getPublicContacts(): Promise<PublicContact[]> {
   try {
     const records = await listCmsRecords("contacts");
@@ -108,7 +117,7 @@ export async function getPublicSiteSettings(): Promise<PublicSiteSettings> {
       siteName: record ? value(record, "siteName", company.brand) : company.brand,
       legalName: record ? value(record, "legalName", company.legalName) : company.legalName,
       tagline: record ? value(record, "tagline", "Industrial Crushing and Mineral Processing Solutions") : "Industrial Crushing and Mineral Processing Solutions",
-      logoUrl: record ? value(record, "logoUrl", "/images/vicmach-mark.png") : "/images/vicmach-mark.png",
+      logoUrl: record ? mediaValue(record, "logoUrl", "/images/vicmach-mark.png") : "/images/vicmach-mark.png",
       phone: phoneContact?.value || (record ? value(record, "phone", company.phone) : company.phone),
       email: emailContact?.value || (record ? value(record, "email", company.email) : company.email),
       whatsapp: whatsappContact?.value || (record ? value(record, "whatsapp", company.phone) : company.phone),
@@ -150,7 +159,7 @@ export async function getPublicProductCategories(): Promise<PublicProductCategor
       title: value(record, "title"),
       slug: value(record, "slug", record.slug ?? "category"),
       description: value(record, "description"),
-      image: value(record, "image", "/images/workshop-line.webp"),
+      image: mediaValue(record, "image", "/images/workshop-line.webp"),
       productSlugs: lines(record.data.productSlugs)
     }));
   } catch {
@@ -177,7 +186,7 @@ export async function getPublicProducts(): Promise<EquipmentProduct[]> {
         category,
         categoryHref: value(record, "categoryHref", `/equipment#${categoryRecord?.slug ?? "equipment"}`),
         summary: value(record, "summary"),
-        heroImage: value(record, "heroImage", categoryRecord?.image ?? "/images/workshop-line.webp"),
+        heroImage: mediaValue(record, "heroImage", categoryRecord?.image ?? "/images/workshop-line.webp"),
         heroAlt: value(record, "heroAlt", value(record, "title")),
         processRole: value(record, "processRole"),
         advantages: lines(record.data.advantages),
@@ -207,7 +216,7 @@ export async function getPublicArticles(): Promise<NewsArticle[]> {
         publishedAt: date,
         publishedLabel: publishedLabel(date),
         readTime: value(record, "readTime", "5 min read"),
-        heroImage: value(record, "heroImage", "/images/workshop-wide.webp"),
+        heroImage: mediaValue(record, "heroImage", "/images/workshop-wide.webp"),
         heroAlt: value(record, "heroAlt", value(record, "title")),
         lead: content.lead,
         sections: content.sections,
@@ -229,8 +238,8 @@ export async function getPublicMediaMap() {
     const records = await listCmsRecords("media");
     return Object.fromEntries(
       records
-        .map((record) => [value(record, "sourcePath"), value(record, "imageUrl")] as const)
-        .filter(([sourcePath, imageUrl]) => sourcePath && imageUrl && sourcePath !== imageUrl)
+        .map((record) => [value(record, "sourcePath"), value(record, "mediaUrl", value(record, "imageUrl"))] as const)
+        .filter(([sourcePath, mediaUrl]) => sourcePath && mediaUrl && sourcePath !== mediaUrl && !isUnsafeProductionUploadUrl(mediaUrl))
     );
   } catch {
     return {};

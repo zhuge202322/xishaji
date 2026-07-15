@@ -6,7 +6,7 @@ const dashboardItems = [
   { collection: "articles", label: "文章", href: "/admin/content/articles", icon: FileText },
   { collection: "products", label: "产品", href: "/admin/content/products", icon: Database },
   { collection: "product-categories", label: "产品类目", href: "/admin/content/product-categories", icon: Settings },
-  { collection: "media", label: "页面图片", href: "/admin/content/media", icon: ImageIcon }
+  { collection: "media", label: "页面媒体", href: "/admin/content/media", icon: ImageIcon }
 ] as const;
 
 export default async function AdminDashboardPage() {
@@ -47,7 +47,7 @@ export default async function AdminDashboardPage() {
           <div className="admin-quick-list">
             <Link href="/admin/content/articles"><FileText size={20} aria-hidden /><span><strong>发布技术文章</strong><small>维护新闻中心文章与正文内容</small></span><ArrowRight size={17} aria-hidden /></Link>
             <Link href="/admin/content/products"><Database size={20} aria-hidden /><span><strong>维护产品资料</strong><small>修改类目、产品介绍和技术卖点</small></span><ArrowRight size={17} aria-hidden /></Link>
-            <Link href="/admin/content/media"><ImageIcon size={20} aria-hidden /><span><strong>替换页面图片</strong><small>上传图片并覆盖全站原始图片路径</small></span><ArrowRight size={17} aria-hidden /></Link>
+            <Link href="/admin/content/media"><ImageIcon size={20} aria-hidden /><span><strong>替换页面媒体</strong><small>上传图片或视频并覆盖全站原始媒体路径</small></span><ArrowRight size={17} aria-hidden /></Link>
             <Link href="/admin/content/site-settings"><Settings size={20} aria-hidden /><span><strong>网站与品牌设置</strong><small>修改网站名称、Logo 和默认联系方式</small></span><ArrowRight size={17} aria-hidden /></Link>
           </div>
         </div>

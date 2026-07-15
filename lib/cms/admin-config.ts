@@ -141,16 +141,17 @@ export const adminCollectionConfigs: Record<CmsCollection, AdminCollectionConfig
   },
   media: {
     collection: "media",
-    label: "页面图片",
-    singularLabel: "图片覆盖",
-    description: "按原始图片路径管理全站各页面和板块使用的图片。",
+    label: "页面媒体",
+    singularLabel: "媒体覆盖",
+    description: "按原始图片或视频路径管理全站各页面和板块使用的媒体文件。",
     titleField: "sourcePath",
     fields: [
-      { key: "sourcePath", label: "原始图片路径", type: "text", required: true, help: "作为全站图片映射键，请谨慎修改。" },
+      { key: "sourcePath", label: "原始媒体路径", type: "text", required: true, help: "作为全站媒体映射键，请谨慎修改。" },
       { key: "pageKey", label: "页面标识", type: "text", placeholder: "例如 home、equipment" },
       { key: "sectionKey", label: "板块标识", type: "text", placeholder: "例如 hero、manufacturing" },
-      { key: "imageUrl", label: "当前图片", type: "image", required: true },
-      { key: "alt", label: "图片说明", type: "text" },
+      { key: "mediaUrl", label: "当前媒体", type: "media", required: true },
+      { key: "imageUrl", label: "旧版图片地址", type: "image", help: "兼容旧数据；新修改请使用“当前媒体”。" },
+      { key: "alt", label: "媒体说明", type: "text" },
       { key: "sortOrder", label: "排序", type: "number" },
       { key: "status", label: "启用状态", type: "select", options: statusOptions }
     ]

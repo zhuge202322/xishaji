@@ -159,5 +159,10 @@ export const mediaManifest = [
   "/images/vicmach-mark.png",
   "/images/washing-equipment.webp",
   "/images/workshop-line.webp",
-  "/images/workshop-wide.webp"
+  "/images/workshop-wide.webp",
+  "/videos/equipment-closeup-demo.mp4",
+  "/videos/equipment-operation-site.mp4",
+  "/videos/factory-workshop-tour.mp4",
+  "/videos/office-and-reception.mp4",
+  "/videos/production-line-walkthrough.mp4"
 ] as const;

@@ -2,9 +2,12 @@ import { readdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 const root = process.cwd();
-const imagesDirectory = path.join(root, "public", "images");
+const mediaDirectories = [
+  path.join(root, "public", "images"),
+  path.join(root, "public", "videos")
+];
 const outputFile = path.join(root, "data", "media-manifest.ts");
-const allowedExtensions = new Set([".avif", ".gif", ".jpeg", ".jpg", ".png", ".webp"]);
+const allowedExtensions = new Set([".avif", ".gif", ".jpeg", ".jpg", ".mp4", ".ogg", ".png", ".webm", ".webp"]);
 
 async function collectFiles(directory) {
   const entries = await readdir(directory, { withFileTypes: true });
@@ -22,7 +25,8 @@ async function collectFiles(directory) {
   return files;
 }
 
-const files = (await collectFiles(imagesDirectory))
+const files = (await Promise.all(mediaDirectories.map((directory) => collectFiles(directory))))
+  .flat()
   .map((file) => `/${path.relative(path.join(root, "public"), file).replaceAll("\\", "/")}`)
   .sort((left, right) => left.localeCompare(right));
 

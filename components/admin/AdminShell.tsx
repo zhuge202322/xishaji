@@ -22,7 +22,7 @@ const adminNavItems = [
   { href: "/admin/content/articles", label: "文章管理", icon: FileText },
   { href: "/admin/content/product-categories", label: "产品类目", icon: FolderTree },
   { href: "/admin/content/products", label: "产品管理", icon: Boxes },
-  { href: "/admin/content/media", label: "页面图片", icon: ImageIcon },
+  { href: "/admin/content/media", label: "页面媒体", icon: ImageIcon },
   { href: "/admin/content/contacts", label: "客服联系方式", icon: ContactRound },
   { href: "/admin/content/social-links", label: "社媒链接", icon: Share2 },
   { href: "/admin/content/site-settings", label: "网站设置", icon: Settings }

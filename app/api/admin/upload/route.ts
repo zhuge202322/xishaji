@@ -6,7 +6,9 @@ import { adminCookieName, verifyAdminToken } from "@/lib/cms/auth";
 
 export const runtime = "nodejs";
 
-const maxUploadBytes = 12 * 1024 * 1024;
+const maxImageUploadBytes = 12 * 1024 * 1024;
+const maxVideoUploadBytes = 50 * 1024 * 1024;
+const allowedVideoTypes = new Set(["video/mp4", "video/webm", "video/ogg"]);
 
 function safeFilename(filename: string) {
   const extension = path.extname(filename).toLowerCase();
@@ -22,13 +24,21 @@ export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
     const file = formData.get("file");
-    if (!(file instanceof File)) return NextResponse.json({ error: "请选择图片文件。" }, { status: 400 });
-    if (!file.type.startsWith("image/")) return NextResponse.json({ error: "只能上传图片文件。" }, { status: 400 });
-    if (file.size > maxUploadBytes) return NextResponse.json({ error: "图片不能超过 12MB。" }, { status: 400 });
+    if (!(file instanceof File)) return NextResponse.json({ error: "请选择图片或视频文件。" }, { status: 400 });
+
+    const isImage = file.type.startsWith("image/");
+    const isVideo = allowedVideoTypes.has(file.type);
+    if (!isImage && !isVideo) return NextResponse.json({ error: "只能上传图片或 MP4/WebM/Ogg 视频文件。" }, { status: 400 });
+    if (isImage && file.size > maxImageUploadBytes) return NextResponse.json({ error: "图片不能超过 12MB。" }, { status: 400 });
+    if (isVideo && file.size > maxVideoUploadBytes) return NextResponse.json({ error: "视频不能超过 50MB。" }, { status: 400 });
 
     const filename = safeFilename(file.name);
     if (process.env.BLOB_READ_WRITE_TOKEN) {
-      const blob = await put(`cms/${filename}`, file, { access: "public", addRandomSuffix: true });
+      const blob = await put(`cms/${filename}`, file, {
+        access: "public",
+        addRandomSuffix: true,
+        contentType: file.type
+      });
       return NextResponse.json({ url: blob.url, storage: "vercel-blob" });
     }
 

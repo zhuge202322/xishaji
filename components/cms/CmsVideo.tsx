@@ -1,11 +1,35 @@
 "use client";
 
-import type { VideoHTMLAttributes } from "react";
+import {
+  Children,
+  cloneElement,
+  isValidElement,
+  type ReactNode,
+  type VideoHTMLAttributes
+} from "react";
 import { useCmsMediaMap } from "./CmsMediaProvider";
 
-export function CmsVideo({ poster, ...props }: VideoHTMLAttributes<HTMLVideoElement>) {
+function resolveMediaSource(mediaMap: Record<string, string>, source: unknown) {
+  if (typeof source !== "string") return source;
+  const cleanSource = source.split("?")[0];
+  return mediaMap[source] ?? mediaMap[cleanSource] ?? source;
+}
+
+function resolveSourceChildren(children: ReactNode, mediaMap: Record<string, string>) {
+  return Children.map(children, (child) => {
+    if (!isValidElement<{ src?: string }>(child) || child.type !== "source") return child;
+    return cloneElement(child, { src: resolveMediaSource(mediaMap, child.props.src) as string | undefined });
+  });
+}
+
+export function CmsVideo({ poster, children, src, ...props }: VideoHTMLAttributes<HTMLVideoElement>) {
   const mediaMap = useCmsMediaMap();
-  const cleanPoster = poster?.split("?")[0];
-  const resolvedPoster = poster ? mediaMap[poster] ?? (cleanPoster ? mediaMap[cleanPoster] : undefined) ?? poster : undefined;
-  return <video {...props} poster={resolvedPoster} />;
+  const resolvedPoster = resolveMediaSource(mediaMap, poster) as string | undefined;
+  const resolvedSrc = resolveMediaSource(mediaMap, src) as string | undefined;
+
+  return (
+    <video {...props} poster={resolvedPoster} src={resolvedSrc}>
+      {resolveSourceChildren(children, mediaMap)}
+    </video>
+  );
 }

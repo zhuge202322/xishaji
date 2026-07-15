@@ -59,6 +59,13 @@ function normalizePostgresRecord(row: Record<string, unknown>): CmsRecord {
   };
 }
 
+function appendMissingMediaSeeds(records: CmsRecord[]) {
+  const existingIds = new Set(records.map((record) => record.id));
+  const missingMediaSeeds = createSeedRecords().filter((record) => record.collection === "media" && !existingIds.has(record.id));
+  if (missingMediaSeeds.length > 0) records.push(...missingMediaSeeds);
+  return missingMediaSeeds.length;
+}
+
 async function ensurePostgresSchema() {
   const sql = getSql();
   if (!sql) return;
@@ -114,6 +121,26 @@ async function ensurePostgresSchema() {
           `;
         });
       }
+
+      const mediaSeeds = createSeedRecords().filter((record) => record.collection === "media");
+      await sql.begin(async (transaction) => {
+        for (const record of mediaSeeds) {
+          await transaction`
+            INSERT INTO cms_records (id, collection, slug, status, sort_order, data, created_at, updated_at)
+            VALUES (
+              ${record.id},
+              ${record.collection},
+              ${record.slug},
+              ${record.status},
+              ${record.sortOrder},
+              ${transaction.json(record.data as postgres.JSONValue)},
+              ${record.createdAt},
+              ${record.updatedAt}
+            )
+            ON CONFLICT (id) DO NOTHING
+          `;
+        }
+      });
     })().catch((error) => {
       globalForCms.cmsSchemaReady = undefined;
       throw error;
@@ -133,6 +160,11 @@ async function readLocalDatabase(): Promise<LocalDatabase> {
     const parsed = JSON.parse(content) as LocalDatabase;
     if (!parsed.initialized || !Array.isArray(parsed.records)) {
       throw new Error("Invalid local CMS data file.");
+    }
+    const added = appendMissingMediaSeeds(parsed.records);
+    if (added > 0) {
+      await mkdir(localDirectory, { recursive: true });
+      await writeFile(localFile, JSON.stringify(parsed, null, 2), "utf8");
     }
     return parsed;
   } catch (error) {

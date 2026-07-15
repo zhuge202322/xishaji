@@ -63,6 +63,7 @@ function inferMediaLocation(sourcePath: string) {
   if (sourcePath.includes("/gallery/client-visit")) return { pageKey: "about", sectionKey: "client-visits" };
   if (sourcePath.includes("/gallery/workshop")) return { pageKey: "about", sectionKey: "workshop" };
   if (sourcePath.includes("/gallery/factory")) return { pageKey: "about", sectionKey: "factory" };
+  if (sourcePath.startsWith("/videos/")) return { pageKey: "factory-visit", sectionKey: "video-evidence" };
   return { pageKey: "global", sectionKey: safeId(sourcePath.split("/").pop() ?? "image") };
 }
 
@@ -189,6 +190,7 @@ export function createSeedRecords(): CmsRecord[] {
         sourcePath,
         {
           sourcePath,
+          mediaUrl: sourcePath,
           imageUrl: sourcePath,
           alt: "",
           pageKey: location.pageKey,

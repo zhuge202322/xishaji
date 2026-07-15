@@ -1,6 +1,7 @@
 "use client";
 
-import Image from "next/image";
+import { CmsImage as Image } from "@/components/cms/CmsImage";
+import { CmsVideo } from "@/components/cms/CmsVideo";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ArrowRight } from "lucide-react";
@@ -49,12 +50,13 @@ export function HomeHero() {
                 alt={scene.media.alt}
                 fill
                 priority={index === 0}
+                quality={90}
                 sizes="100vw"
               />
             ) : index === activeIndex ? (
-              <video autoPlay muted loop playsInline poster={scene.media.poster} aria-label={scene.media.alt}>
+              <CmsVideo autoPlay muted loop playsInline poster={scene.media.poster} aria-label={scene.media.alt}>
                 <source src={scene.media.src} type="video/mp4" />
-              </video>
+              </CmsVideo>
             ) : null}
           </div>
         ))}

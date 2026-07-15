@@ -1,25 +1,23 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import { CmsImage as Image } from "@/components/cms/CmsImage";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, CheckCircle2, ClipboardCheck, FileText, Gauge, MessageSquare, Ruler, Send, Settings2, ShieldCheck } from "lucide-react";
 import { SectionHeading } from "@/components/SectionHeading";
 import { CertificateEvidence, ManufacturingEvidence } from "@/components/TrustEvidence";
-import { company } from "@/data/site";
 import { getEquipmentDocxDetail } from "@/data/equipment-docx-details";
-import { equipmentProducts, getEquipmentProductBySlug, getEquipmentProductByTitle, type EquipmentProduct } from "@/data/equipment-products";
+import type { EquipmentProduct } from "@/data/equipment-products";
+import { getPublicProducts, getPublicSiteSettings } from "@/lib/cms/public-content";
+
+export const dynamic = "force-dynamic";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
 };
 
-export function generateStaticParams() {
-  return equipmentProducts.map((product) => ({ slug: product.slug }));
-}
-
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const product = getEquipmentProductBySlug(slug);
+  const product = (await getPublicProducts()).find((item) => item.slug === slug);
 
   if (!product) {
     return {};
@@ -44,14 +42,15 @@ function isEquipmentProduct(product: EquipmentProduct | undefined): product is E
 
 export default async function EquipmentDetailPage({ params }: PageProps) {
   const { slug } = await params;
-  const product = getEquipmentProductBySlug(slug);
+  const [products, settings] = await Promise.all([getPublicProducts(), getPublicSiteSettings()]);
+  const product = products.find((item) => item.slug === slug);
 
   if (!product) {
     notFound();
   }
 
-  const whatsappHref = `https://wa.me/${company.phone.replace(/\D/g, "")}`;
-  const relatedProducts = product.relatedTitles.map(getEquipmentProductByTitle).filter(isEquipmentProduct);
+  const whatsappHref = `https://wa.me/${settings.whatsapp.replace(/\D/g, "")}`;
+  const relatedProducts = product.relatedTitles.map((title) => products.find((item) => item.title === title)).filter(isEquipmentProduct);
   const docxDetail = getEquipmentDocxDetail(product.slug);
 
   return (

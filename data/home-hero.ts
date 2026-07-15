@@ -23,7 +23,7 @@ export const homeHeroScenes: HomeHeroScene[] = [
       "From R&D and manufacturing to commissioning and installation, one accountable team delivers stronger value for every mineral processing project.",
     media: {
       type: "image",
-      src: "/images/hero-scenes/manufacturer-direct.webp",
+      src: "/images/hero-scenes/manufacturer-direct.webp?v=3fc25d35",
       alt: "VICMACH mineral processing equipment inside the manufacturing workshop"
     },
     primaryCta: { label: "Get Equipment Plan & Quote", href: "/contact#inquiry-title" },
@@ -39,7 +39,7 @@ export const homeHeroScenes: HomeHeroScene[] = [
       "Process design, complete equipment manufacturing, installation, and commissioning come together in one turnkey project path.",
     media: {
       type: "image",
-      src: "/images/hero-scenes/epc-delivery.webp",
+      src: "/images/hero-scenes/epc-delivery.webp?v=5c64568c",
       alt: "VICMACH turnkey crushing and mineral processing production line at a quarry"
     },
     primaryCta: { label: "Get EPC Solution & Quote", href: "/contact#inquiry-title" },
@@ -55,7 +55,7 @@ export const homeHeroScenes: HomeHeroScene[] = [
       "From early ore testing to core equipment development, we build a high-output production line around your actual material, targets, and site conditions.",
     media: {
       type: "image",
-      src: "/images/hero-scenes/custom-engineering.webp",
+      src: "/images/hero-scenes/custom-engineering.webp?v=035ff7f1",
       alt: "VICMACH engineers reviewing a customized mineral processing production line"
     },
     primaryCta: { label: "Request a Custom Process Route", href: "/contact#inquiry-title" },

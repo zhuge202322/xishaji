@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import { CmsImage as Image } from "@/components/cms/CmsImage";
 import Link from "next/link";
 import { CheckCircle2, FileText, Globe2, MapPin, MessageSquare, Send } from "lucide-react";
 import { SectionHeading } from "@/components/SectionHeading";
-import { company, projects } from "@/data/site";
+import { projects } from "@/data/site";
+import { getPublicSiteSettings } from "@/lib/cms/public-content";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Global Projects | VICMACH",
@@ -11,8 +14,9 @@ export const metadata: Metadata = {
     "Selected VICMACH project cases for aggregate, sand-making, mineral processing, and grinding production lines."
 };
 
-export default function ProjectsPage() {
-  const whatsappHref = `https://wa.me/${company.phone.replace(/\D/g, "")}`;
+export default async function ProjectsPage() {
+  const settings = await getPublicSiteSettings();
+  const whatsappHref = `https://wa.me/${settings.whatsapp.replace(/\D/g, "")}`;
 
   return (
     <main>

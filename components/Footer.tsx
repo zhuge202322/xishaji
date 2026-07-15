@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Globe2, Mail, MapPin, MessageSquare, Music2, Phone, PlaySquare, Video } from "lucide-react";
-import { company, equipmentGroups, globalOffices, oreSolutionGroups, socialChannels } from "@/data/site";
+import { globalOffices, oreSolutionGroups } from "@/data/site";
+import type { PublicProductCategory, PublicSiteSettings, PublicSocialLink } from "@/lib/cms/types";
 import { Logo } from "./Logo";
 
 const socialIcons = {
@@ -11,8 +12,15 @@ const socialIcons = {
   youtube: PlaySquare
 };
 
-export function Footer() {
-  const whatsappHref = `https://wa.me/${company.phone.replace(/\D/g, "")}`;
+type FooterProps = {
+  settings: PublicSiteSettings;
+  socialLinks: PublicSocialLink[];
+  equipmentGroups: PublicProductCategory[];
+};
+
+export function Footer({ settings, socialLinks, equipmentGroups }: FooterProps) {
+  const whatsappHref = `https://wa.me/${settings.whatsapp.replace(/\D/g, "")}`;
+  const offices = globalOffices.map((office, index) => index === 0 ? { ...office, name: settings.legalName, address: settings.headquarters } : office);
 
   return (
     <footer className="site-footer">
@@ -32,7 +40,7 @@ export function Footer() {
       </div>
 
       <div className="footer-office-band" aria-label="VICMACH global offices">
-        {globalOffices.map((office) => (
+        {offices.map((office) => (
           <div key={office.label}>
             <MapPin size={18} aria-hidden />
             <span>
@@ -46,16 +54,16 @@ export function Footer() {
 
       <div className="footer-grid">
         <div className="footer-brand">
-          <Logo />
+          <Logo settings={settings} />
           <p>
             Global manufacturer of heavy-duty crushing, sand-making, mineral processing,
             grinding, building material, washing, and environmental recovery equipment.
           </p>
           <div className="footer-contact-row">
-            <a href={`tel:${company.phone.replaceAll(" ", "")}`} aria-label="Call VICMACH">
+            <a href={`tel:${settings.phone.replaceAll(" ", "")}`} aria-label={`Call ${settings.siteName}`}>
               <Phone size={18} aria-hidden />
             </a>
-            <a href={`mailto:${company.email}`} aria-label="Email VICMACH">
+            <a href={`mailto:${settings.email}`} aria-label={`Email ${settings.siteName}`}>
               <Mail size={18} aria-hidden />
             </a>
             <a href={whatsappHref} target="_blank" rel="noreferrer" aria-label="Contact VICMACH on WhatsApp">
@@ -67,7 +75,7 @@ export function Footer() {
         <div>
           <h2>Equipment Center</h2>
           {equipmentGroups.map((item) => (
-            <Link key={item.href} href={item.href}>
+            <Link key={item.slug} href={`/equipment#${item.slug}`}>
               {item.title}
             </Link>
           ))}
@@ -99,19 +107,21 @@ export function Footer() {
           <h2>Official Channels</h2>
           <p className="fine-print">Connect with VICMACH across our active video and social platforms.</p>
           <div className="footer-social-links">
-            {socialChannels.map((channel) => {
-              const Icon = socialIcons[channel.id as keyof typeof socialIcons];
+            {socialLinks.map((channel) => {
+              const Icon = socialIcons[channel.platform as keyof typeof socialIcons] ?? Globe2;
 
               return (
-                <Link
+                <a
                   key={channel.id}
-                  href={channel.href}
+                  href={channel.url}
                   title={channel.label}
-                  aria-label={`Contact VICMACH for the official ${channel.label} account`}
+                  aria-label={`Open ${settings.siteName} ${channel.label}`}
+                  target="_blank"
+                  rel="noreferrer"
                 >
                   <Icon size={17} aria-hidden />
                   <span>{channel.label}</span>
-                </Link>
+                </a>
               );
             })}
           </div>
@@ -119,7 +129,7 @@ export function Footer() {
       </div>
 
       <div className="footer-bottom">
-        <span>Copyright 2026 {company.legalName}. All rights reserved.</span>
+        <span>Copyright 2026 {settings.legalName}. All rights reserved.</span>
         <span>High-Tech Enterprise / CE Files / 25+ Patents / 100+ Project References</span>
       </div>
     </footer>

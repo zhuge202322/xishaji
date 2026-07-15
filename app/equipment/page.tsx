@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import { CmsImage as Image } from "@/components/cms/CmsImage";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, FileText, MessageSquare, Ruler, Send } from "lucide-react";
 import { CertificateEvidence, ManufacturingEvidence } from "@/components/TrustEvidence";
-import { getEquipmentProductByTitle } from "@/data/equipment-products";
-import { company, equipmentGroups } from "@/data/site";
+import { getPublicProductCategories, getPublicProducts, getPublicSiteSettings } from "@/lib/cms/public-content";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Equipment Center | VICMACH",
@@ -12,17 +13,17 @@ export const metadata: Metadata = {
     "VICMACH equipment center for crushing, screening, grinding, classification, beneficiation, dewatering, supporting systems, and wet washing machinery."
 };
 
-const categoryImages = [
-  "/images/workshop-wide.webp",
-  "/images/grinding-equipment.webp",
-  "/images/product-inspection.webp",
-  "/images/gallery/workshop-assembly-03.webp",
-  "/images/workshop-line.webp",
-  "/images/washing-equipment.webp"
-];
-
-export default function EquipmentPage() {
-  const whatsappHref = `https://wa.me/${company.phone.replace(/\D/g, "")}`;
+export default async function EquipmentPage() {
+  const [categories, products, settings] = await Promise.all([getPublicProductCategories(), getPublicProducts(), getPublicSiteSettings()]);
+  const equipmentGroups = categories.map((category) => ({
+    title: category.title,
+    href: `/equipment#${category.slug}`,
+    text: category.description,
+    image: category.image,
+    items: products.filter((product) => product.category === category.title).map((product) => product.title)
+  }));
+  const getEquipmentProductByTitle = (title: string) => products.find((product) => product.title === title);
+  const whatsappHref = `https://wa.me/${settings.whatsapp.replace(/\D/g, "")}`;
 
   return (
     <main>
@@ -86,7 +87,7 @@ export default function EquipmentPage() {
             <article className="equipment-catalog-card" id={group.href.split("#")[1]} key={group.title}>
               <div className="equipment-catalog-media">
                 <Image
-                  src={categoryImages[index] ?? "/images/workshop-line.webp"}
+                  src={group.image}
                   alt={`${group.title} equipment`}
                   fill
                   sizes="(max-width: 900px) 100vw, 42vw"

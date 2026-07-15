@@ -13,6 +13,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+.cms-data/
+public/uploads/
 
 qa-screenshots/
 stitch_vicmach_official_website_design/

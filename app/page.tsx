@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { CmsImage as Image } from "@/components/cms/CmsImage";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -24,7 +24,10 @@ import {
   HomeEvidenceSummary,
   TrustProofGrid
 } from "@/components/TrustEvidence";
-import { categories, company, equipmentGroups, globalOffices, oreSolutionGroups, projects, timeline } from "@/data/site";
+import { categories, equipmentGroups, globalOffices, oreSolutionGroups, projects, timeline } from "@/data/site";
+import { getPublicSiteSettings } from "@/lib/cms/public-content";
+
+export const dynamic = "force-dynamic";
 
 const equipmentCategoryImages = [
   "/images/workshop-wide.webp",
@@ -35,8 +38,9 @@ const equipmentCategoryImages = [
   "/images/washing-equipment.webp"
 ];
 
-export default function HomePage() {
-  const whatsappHref = `https://wa.me/${company.phone.replace(/\D/g, "")}`;
+export default async function HomePage() {
+  const settings = await getPublicSiteSettings();
+  const whatsappHref = `https://wa.me/${settings.whatsapp.replace(/\D/g, "")}`;
 
   return (
     <main>
@@ -259,9 +263,10 @@ export default function HomePage() {
       <section className="epc-experience" id="epc">
         <Image
           className="epc-background"
-          src="/images/hero-scenes/epc-delivery.webp"
+          src="/images/hero-scenes/epc-delivery.webp?v=5c64568c"
           alt="VICMACH complete aggregate production line delivered as an EPC project"
           fill
+          quality={90}
           sizes="100vw"
         />
         <div className="epc-shade" />
@@ -405,11 +410,11 @@ export default function HomePage() {
             <p className="eyebrow">Start Your Project</p>
             <h2>Send material, capacity, and site details for a tailored recommendation.</h2>
             <div className="global-contact-direct">
-              <a href={`tel:${company.phone.replaceAll(" ", "")}`}>
-                <Phone size={18} aria-hidden /> {company.phone}
+              <a href={`tel:${settings.phone.replaceAll(" ", "")}`}>
+                <Phone size={18} aria-hidden /> {settings.phone}
               </a>
-              <a href={`mailto:${company.email}`}>
-                <Mail size={18} aria-hidden /> {company.email}
+              <a href={`mailto:${settings.email}`}>
+                <Mail size={18} aria-hidden /> {settings.email}
               </a>
             </div>
           </div>

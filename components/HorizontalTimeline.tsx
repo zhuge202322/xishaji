@@ -108,7 +108,9 @@ export function HorizontalTimeline({ items }: HorizontalTimelineProps) {
           eyebrow="A Decade of Progress"
           title="From Mining Machinery Roots to Global EPC Delivery"
         />
-        <div className="decade-controls" aria-label="Timeline controls">
+      </div>
+      <div className="container decade-slider-shell">
+        <div className="decade-controls decade-side-controls" aria-label="Timeline controls">
           <button
             type="button"
             onPointerDown={(event) => {
@@ -136,28 +138,28 @@ export function HorizontalTimeline({ items }: HorizontalTimelineProps) {
             <ChevronRight size={20} aria-hidden />
           </button>
         </div>
-      </div>
-      <div
-        className="decade-viewport"
-        ref={viewportRef}
-        role="region"
-        aria-label="VICMACH company timeline"
-        tabIndex={0}
-        onKeyDown={handleKeyDown}
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={stopDragging}
-        onPointerCancel={stopDragging}
-      >
-        <div className="decade-track">
-          {items.map((item, index) => (
-            <article className="decade-card" key={`${item.year}-${item.title}`}>
-              <span className="decade-index">{String(index + 1).padStart(2, "0")}</span>
-              <strong>{item.year}</strong>
-              <h3>{item.title}</h3>
-              <p>{item.text}</p>
-            </article>
-          ))}
+        <div
+          className="decade-viewport"
+          ref={viewportRef}
+          role="region"
+          aria-label="VICMACH company timeline"
+          tabIndex={0}
+          onKeyDown={handleKeyDown}
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={stopDragging}
+          onPointerCancel={stopDragging}
+        >
+          <div className="decade-track">
+            {items.map((item, index) => (
+              <article className="decade-card" key={`${item.year}-${item.title}`}>
+                <span className="decade-index">{String(index + 1).padStart(2, "0")}</span>
+                <strong>{item.year}</strong>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </article>
+            ))}
+          </div>
         </div>
       </div>
     </section>

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import { CmsImage as Image } from "@/components/cms/CmsImage";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -19,7 +19,7 @@ import {
 import { SectionHeading } from "@/components/SectionHeading";
 import { CertificateEvidence, ManufacturingEvidence } from "@/components/TrustEvidence";
 import { getEquipmentProductByTitle } from "@/data/equipment-products";
-import { company } from "@/data/site";
+import { getPublicSiteSettings } from "@/lib/cms/public-content";
 import {
   getOreProductBySlug,
   getRelatedOreProducts,
@@ -66,12 +66,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function OreDetailPage({ params }: PageProps) {
   const { slug } = await params;
   const product = getOreProductBySlug(slug);
+  const settings = await getPublicSiteSettings();
 
   if (!product) {
     notFound();
   }
 
-  const whatsappHref = `https://wa.me/${company.phone.replace(/\D/g, "")}`;
+  const whatsappHref = `https://wa.me/${settings.whatsapp.replace(/\D/g, "")}`;
   const displayImages = product.images.length > 0 ? product.images : [fallbackOreImage];
   const heroImage = displayImages[0];
   const relatedProducts = getRelatedOreProducts(product.relatedSlugs);

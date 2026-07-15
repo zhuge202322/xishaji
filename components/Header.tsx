@@ -3,19 +3,33 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, ChevronDown, Menu, X } from "lucide-react";
-import { equipmentProducts, getEquipmentProductByTitle } from "@/data/equipment-products";
+import type { EquipmentProduct } from "@/data/equipment-products";
 import { oreProductGroups } from "@/data/ore-products";
-import { company, equipmentGroups, navItems } from "@/data/site";
+import { navItems } from "@/data/site";
+import type { PublicProductCategory, PublicSiteSettings } from "@/lib/cms/types";
 import { Logo } from "./Logo";
 
 const dropdownLabels = new Set(["Ore Solutions", "Equipment Center"]);
-const equipmentProductCount = equipmentProducts.length;
 const oreRouteCount = oreProductGroups.reduce((total, group) => total + group.products.length, 0);
 
-export function Header() {
+type HeaderProps = {
+  settings: PublicSiteSettings;
+  equipmentGroups: PublicProductCategory[];
+  equipmentProducts: EquipmentProduct[];
+};
+
+export function Header({ settings, equipmentGroups, equipmentProducts }: HeaderProps) {
   const [open, setOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<"ore" | "equipment" | null>(null);
   const headerRef = useRef<HTMLElement>(null);
+  const equipmentProductCount = equipmentProducts.length;
+  const groups = equipmentGroups.map((group) => ({
+    title: group.title,
+    href: `/equipment#${group.slug}`,
+    text: group.description,
+    items: equipmentProducts.filter((product) => product.category === group.title).map((product) => product.title)
+  }));
+  const getEquipmentProductByTitle = (title: string) => equipmentProducts.find((product) => product.title === title);
 
   useEffect(() => {
     function handlePointerDown(event: PointerEvent) {
@@ -52,7 +66,7 @@ export function Header() {
   return (
     <header className="site-header" ref={headerRef}>
       <div className="header-inner">
-        <Logo />
+        <Logo settings={settings} />
 
         <nav className="desktop-nav" aria-label="Main navigation">
           {navItems.map((item) => {
@@ -144,7 +158,7 @@ export function Header() {
                       <p>Browse the process family first, then open individual product detail pages with DOCX descriptions, images, and selection notes.</p>
                       <div className="mega-feature-stats">
                         <div>
-                          <strong>{equipmentGroups.length}</strong>
+                          <strong>{groups.length}</strong>
                           <span>Families</span>
                         </div>
                         <div>
@@ -157,7 +171,7 @@ export function Header() {
                       </Link>
                     </div>
                     <div className="mega-content-grid mega-content-grid-equipment">
-                      {equipmentGroups.map((group) => (
+                      {groups.map((group) => (
                         <div className="mega-equipment-column" key={group.title}>
                           <Link className="mega-group-link" href={group.href} onClick={closeDropdown}>
                             {group.title}
@@ -246,7 +260,7 @@ export function Header() {
 
           <div className="mobile-nav-group">
             <p className="eyebrow">Equipment Center</p>
-            {equipmentGroups.map((group) => (
+            {groups.map((group) => (
               <div className="mobile-nav-subgroup" key={group.title}>
                 <Link href={group.href} onClick={() => setOpen(false)}>
                   {group.title}
@@ -264,8 +278,8 @@ export function Header() {
             ))}
           </div>
 
-          <a className="mobile-contact" href={`tel:${company.phone.replaceAll(" ", "")}`}>
-            {company.phone}
+          <a className="mobile-contact" href={`tel:${settings.phone.replaceAll(" ", "")}`}>
+            {settings.phone}
           </a>
         </nav>
       ) : null}

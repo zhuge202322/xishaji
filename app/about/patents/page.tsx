@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import { CmsImage as Image } from "@/components/cms/CmsImage";
 import { Cpu, Gauge, Leaf, Settings2 } from "lucide-react";
 import { AboutHero } from "@/components/AboutHero";
 import { company } from "@/data/site";

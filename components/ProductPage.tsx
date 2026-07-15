@@ -1,16 +1,18 @@
-import Image from "next/image";
+import { CmsImage as Image } from "@/components/cms/CmsImage";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, FileText, MessageSquare, Ruler, Send } from "lucide-react";
-import { company, type Product } from "@/data/site";
+import type { Product } from "@/data/site";
+import { getPublicSiteSettings } from "@/lib/cms/public-content";
 import { SectionHeading } from "./SectionHeading";
 
 type ProductPageProps = {
   product: Product;
 };
 
-export function ProductPage({ product }: ProductPageProps) {
+export async function ProductPage({ product }: ProductPageProps) {
+  const settings = await getPublicSiteSettings();
   const ProductIcon = product.icon;
-  const whatsappHref = `https://wa.me/${company.phone.replace(/\D/g, "")}`;
+  const whatsappHref = `https://wa.me/${settings.whatsapp.replace(/\D/g, "")}`;
 
   return (
     <main>

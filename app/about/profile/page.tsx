@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import { CmsImage as Image } from "@/components/cms/CmsImage";
 import Link from "next/link";
 import { ArrowRight, Factory, Globe2, MapPin, Wrench } from "lucide-react";
 import { AboutHero } from "@/components/AboutHero";

@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import { CmsImage as Image } from "@/components/cms/CmsImage";
 import Link from "next/link";
 import { ExternalLink, Mail, MapPin, MessageSquare, Phone } from "lucide-react";
 import { ContactForm } from "@/components/ContactForm";
 import { certificateFiles, company } from "@/data/site";
+import { getPublicContacts, getPublicSiteSettings } from "@/lib/cms/public-content";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Contact & Inquiry | VICMACH",
@@ -11,7 +14,12 @@ export const metadata: Metadata = {
     "Contact VICMACH for crushing, sand making, mineral processing, grinding, and washing equipment inquiries."
 };
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const [settings, contacts] = await Promise.all([getPublicSiteSettings(), getPublicContacts()]);
+  const phone = contacts.find((item) => item.kind === "phone");
+  const email = contacts.find((item) => item.kind === "email");
+  const whatsapp = contacts.find((item) => item.kind === "whatsapp");
+
   return (
     <main>
       <section className="simple-hero blueprint">
@@ -30,14 +38,14 @@ export default function ContactPage() {
           <aside className="contact-aside">
             <div className="contact-card primary-contact">
               <p className="eyebrow">China Headquarters</p>
-              <h2>{company.legalName}</h2>
+              <h2>{settings.legalName}</h2>
               <p className="contact-local-name">{company.cnName}</p>
-              <p>{company.headquarters}</p>
-              <a href={`tel:${company.phone.replaceAll(" ", "")}`}>
-                <Phone size={18} aria-hidden /> {company.phone}
+              <p>{settings.headquarters}</p>
+              <a href={phone?.href || `tel:${settings.phone.replaceAll(" ", "")}`}>
+                <Phone size={18} aria-hidden /> {phone?.value || settings.phone}
               </a>
-              <a href={`mailto:${company.email}`}>
-                <Mail size={18} aria-hidden /> {company.email}
+              <a href={email?.href || `mailto:${settings.email}`}>
+                <Mail size={18} aria-hidden /> {email?.value || settings.email}
               </a>
             </div>
 
@@ -54,7 +62,7 @@ export default function ContactPage() {
               </div>
             </div>
 
-            <a className="whatsapp-card" href={`https://wa.me/${company.phone.replace(/\\D/g, "")}`}>
+            <a className="whatsapp-card" href={whatsapp?.href || `https://wa.me/${settings.whatsapp.replace(/\D/g, "")}`}>
               <MessageSquare size={24} aria-hidden />
               <span>
                 <strong>Direct WhatsApp Support</strong>

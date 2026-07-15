@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import { CmsImage as Image } from "@/components/cms/CmsImage";
 import { AboutHero } from "@/components/AboutHero";
 import { HorizontalTimeline } from "@/components/HorizontalTimeline";
 import { timeline } from "@/data/site";

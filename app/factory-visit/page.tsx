@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import { CmsImage as Image } from "@/components/cms/CmsImage";
 import Link from "next/link";
 import { ArrowRight, CalendarCheck, CheckCircle2, Plane, Users2 } from "lucide-react";
 import { SectionHeading } from "@/components/SectionHeading";

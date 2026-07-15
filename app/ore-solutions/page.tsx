@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import { CmsImage as Image } from "@/components/cms/CmsImage";
 import Link from "next/link";
 import { ArrowRight, Beaker, CheckCircle2, FileText, MessageSquare, Send } from "lucide-react";
 import { VideoEvidence } from "@/components/TrustEvidence";
 import { oreProductGroups } from "@/data/ore-products";
-import { company } from "@/data/site";
+import { getPublicSiteSettings } from "@/lib/cms/public-content";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Ore Solutions | VICMACH",
@@ -20,8 +22,9 @@ const processSteps = [
   "Equipment configuration and quotation"
 ];
 
-export default function OreSolutionsPage() {
-  const whatsappHref = `https://wa.me/${company.phone.replace(/\D/g, "")}`;
+export default async function OreSolutionsPage() {
+  const settings = await getPublicSiteSettings();
+  const whatsappHref = `https://wa.me/${settings.whatsapp.replace(/\D/g, "")}`;
 
   return (
     <main>

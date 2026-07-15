@@ -1,59 +1,54 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
-import { FloatingInquiry } from "@/components/FloatingInquiry";
-import { GsapInteractions } from "@/components/GsapInteractions";
-import { company } from "@/data/site";
+import { CmsMediaProvider } from "@/components/cms/CmsMediaProvider";
+import { SiteChrome } from "@/components/SiteChrome";
+import { getPublicChromeData, getPublicSiteSettings } from "@/lib/cms/public-content";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
-export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
-  title: "VICMACH | Crushing, Sand Making & Mineral Processing Equipment",
-  description:
-    "Henan Victory Machinery Co., Ltd. manufactures crushing, sand making, mineral processing, grinding, building material, and washing equipment for global mining projects.",
-  keywords: [
-    "VICMACH",
-    "Henan Victory Machinery",
-    "crushing equipment",
-    "sand making plant",
-    "mineral processing",
-    "grinding mill",
-    "washing equipment",
-    "EPC mining plant"
-  ],
-  openGraph: {
-    title: "VICMACH | Industrial Crushing & Mineral Processing Solutions",
-    description:
-      "Heavy-duty mining machinery and EPC production lines from Henan Victory Machinery Co., Ltd.",
-    images: ["/images/hero-factory.webp"]
-  }
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getPublicSiteSettings();
+  const description = `${settings.legalName} manufactures crushing, sand making, mineral processing, grinding, building material, and washing equipment for global mining projects.`;
+  return {
+    metadataBase: new URL(siteUrl),
+    title: `${settings.siteName} | Crushing, Sand Making & Mineral Processing Equipment`,
+    description,
+    keywords: [settings.siteName, settings.legalName, "crushing equipment", "sand making plant", "mineral processing", "grinding mill", "washing equipment", "EPC mining plant"],
+    openGraph: {
+      title: `${settings.siteName} | Industrial Crushing & Mineral Processing Solutions`,
+      description,
+      images: ["/images/hero-factory.webp"]
+    }
+  };
+}
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const chromeData = await getPublicChromeData();
   return (
     <html lang="en" data-scroll-behavior="smooth">
       <body>
-        <a className="skip-link" href="#main">
-          Skip to main content
-        </a>
-        <Header />
-        <FloatingInquiry />
-        <div id="main">{children}</div>
-        <Footer />
-        <GsapInteractions />
+        <CmsMediaProvider mediaMap={chromeData.mediaMap}>
+          <SiteChrome
+            settings={chromeData.settings}
+            contacts={chromeData.contacts}
+            socialLinks={chromeData.socialLinks}
+            productCategories={chromeData.productCategories}
+            products={chromeData.products}
+          >
+            {children}
+          </SiteChrome>
+        </CmsMediaProvider>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Organization",
-              name: company.legalName,
-              alternateName: company.brand,
-              email: company.email,
-              telephone: company.phone,
-              address: company.headquarters,
+              name: chromeData.settings.legalName,
+              alternateName: chromeData.settings.siteName,
+              email: chromeData.settings.email,
+              telephone: chromeData.settings.phone,
+              address: chromeData.settings.headquarters,
               url: siteUrl
             })
           }}

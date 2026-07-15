@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import { CmsImage as Image } from "@/components/cms/CmsImage";
 import Link from "next/link";
-import { ArrowRight, CalendarDays, FileText, MessageSquare, Send } from "lucide-react";
+import { ArrowRight, CalendarDays, Clock3, FileText, MessageSquare, Send } from "lucide-react";
 import { SectionHeading } from "@/components/SectionHeading";
-import { company, newsItems } from "@/data/site";
+import { getPublicArticles, getPublicSiteSettings } from "@/lib/cms/public-content";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "News Center | VICMACH",
@@ -11,8 +13,9 @@ export const metadata: Metadata = {
     "VICMACH news center with procurement guides, process notes, equipment selection tips, and factory verification resources."
 };
 
-export default function NewsPage() {
-  const whatsappHref = `https://wa.me/${company.phone.replace(/\D/g, "")}`;
+export default async function NewsPage() {
+  const [newsArticles, settings] = await Promise.all([getPublicArticles(), getPublicSiteSettings()]);
+  const whatsappHref = `https://wa.me/${settings.whatsapp.replace(/\D/g, "")}`;
 
   return (
     <main>
@@ -53,44 +56,41 @@ export default function NewsPage() {
       <section className="section">
         <div className="container">
           <SectionHeading
-            eyebrow="Latest Resources"
-            title="Useful notes for technical buyers"
-            text="These guides are structured around the questions buyers usually ask before requesting a detailed quotation."
+            eyebrow="Technical Article Library"
+            title="Practical guidance for mining project buyers"
+            text="Read detailed procurement, process, factory verification, and production-line articles prepared around real project decisions."
           />
-          <div className="news-grid">
-            {newsItems.map((item, index) => (
-              <article className="news-card" key={item.title}>
-                <span className="case-index">{String(index + 1).padStart(2, "0")}</span>
-                <p className="eyebrow">
-                  <CalendarDays size={14} aria-hidden /> {item.category}
-                </p>
-                <h2>{item.title}</h2>
-                <p>{item.text}</p>
-                <Link href={item.href}>
-                  Continue <ArrowRight size={16} aria-hidden />
+          <div className="news-list">
+            {newsArticles.map((article, index) => (
+              <article className="news-list-item" key={article.slug}>
+                <Link className="news-list-link" href={`/news/${article.slug}`}>
+                  <div className="news-list-media">
+                    <Image
+                      src={article.heroImage}
+                      alt={article.heroAlt}
+                      fill
+                      sizes="(max-width: 767px) 100vw, 34vw"
+                    />
+                    <span className="news-list-index">{String(index + 1).padStart(2, "0")}</span>
+                  </div>
+                  <div className="news-list-content">
+                    <div className="news-list-meta">
+                      <span>{article.category}</span>
+                      <time dateTime={article.publishedAt}>
+                        <CalendarDays size={15} aria-hidden /> {article.publishedLabel}
+                      </time>
+                      <span><Clock3 size={15} aria-hidden /> {article.readTime}</span>
+                    </div>
+                    <h2>{article.title}</h2>
+                    <p>{article.summary}</p>
+                    <span className="news-list-action">
+                      Read Article <ArrowRight size={17} aria-hidden />
+                    </span>
+                  </div>
                 </Link>
               </article>
             ))}
           </div>
-        </div>
-      </section>
-
-      <section className="section section-muted">
-        <div className="container editorial-support">
-          <div>
-            <p className="eyebrow">Content Plan</p>
-            <h2>Recommended future articles</h2>
-            <p>
-              The page is ready for deeper posts when product parameters, project stories,
-              installation photos, or customer visit records are added later.
-            </p>
-          </div>
-          <ul>
-            <li>Crusher model comparison by material hardness and output size</li>
-            <li>Gold ore process route: gravity, flotation, and cyanidation options</li>
-            <li>How to inspect a machinery factory before signing a project order</li>
-            <li>Water recycling and fine sand recovery in modern sand production</li>
-          </ul>
         </div>
       </section>
     </main>

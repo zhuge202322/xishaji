@@ -178,33 +178,6 @@ export const equipmentGroups = [
   }
 ];
 
-export const newsItems = [
-  {
-    title: "What to prepare before requesting a crushing plant quotation",
-    category: "Procurement Guide",
-    text: "Material hardness, feed size, target capacity, final grading, site layout, and power conditions help engineers select the right crushing and screening route.",
-    href: "/contact"
-  },
-  {
-    title: "How ore samples shape a beneficiation process flow",
-    category: "Ore Processing",
-    text: "Recovery targets depend on mineral composition, liberation size, mud content, and water conditions, so sample testing and process review should happen before model selection.",
-    href: "/ore-solutions"
-  },
-  {
-    title: "Factory visit checklist for overseas machinery buyers",
-    category: "Supplier Verification",
-    text: "Workshop scale, equipment stock, inspection routines, certificates, export support, and service response are practical signals for judging supplier reliability.",
-    href: "/factory-visit"
-  },
-  {
-    title: "Why washing and water recovery matter in sand production",
-    category: "Sand & Aggregate",
-    text: "Integrated washing, dewatering, fine recovery, and mud-water treatment help control finished sand quality while reducing site discharge pressure.",
-    href: "/equipment#wet-washing"
-  }
-];
-
 export const oreSolutionGroups = [
   {
     title: "Precious & Polymetallic",

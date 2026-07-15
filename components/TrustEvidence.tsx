@@ -1,4 +1,5 @@
-import Image from "next/image";
+import { CmsImage as Image } from "@/components/cms/CmsImage";
+import { CmsVideo } from "@/components/cms/CmsVideo";
 import Link from "next/link";
 import { ArrowRight, Download, ExternalLink, PlayCircle, ShieldCheck } from "lucide-react";
 import {
@@ -167,9 +168,9 @@ export function VideoEvidence({ compact = false }: { compact?: boolean }) {
           {videos.map((video) => (
             <article className="video-card" key={video.src}>
               <div className="video-frame">
-                <video controls preload="metadata" poster={video.poster}>
+                <CmsVideo controls preload="metadata" poster={video.poster}>
                   <source src={video.src} type="video/mp4" />
-                </video>
+                </CmsVideo>
                 <span>
                   <PlayCircle size={18} aria-hidden /> {video.meta}
                 </span>

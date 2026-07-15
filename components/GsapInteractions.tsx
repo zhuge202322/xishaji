@@ -27,7 +27,7 @@ const cardSelector = [
   ".ore-equipment-panel",
   ".certificate-card",
   ".service-step-card",
-  ".news-card",
+  ".news-list-item",
   ".process-card",
   ".highlight-card",
   ".case-card",

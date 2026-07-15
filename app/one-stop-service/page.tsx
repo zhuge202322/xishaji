@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import { CmsImage as Image } from "@/components/cms/CmsImage";
 import Link from "next/link";
 import { ArrowRight, ClipboardCheck, Factory, FileText, MessageSquare, Send, Settings2, Truck, Wrench } from "lucide-react";
 import { SectionHeading } from "@/components/SectionHeading";
 import { GalleryEvidence, VideoEvidence } from "@/components/TrustEvidence";
-import { company } from "@/data/site";
+import { getPublicSiteSettings } from "@/lib/cms/public-content";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "One-stop Plant Service | VICMACH",
@@ -40,8 +42,9 @@ const serviceSteps = [
   }
 ];
 
-export default function OneStopServicePage() {
-  const whatsappHref = `https://wa.me/${company.phone.replace(/\D/g, "")}`;
+export default async function OneStopServicePage() {
+  const settings = await getPublicSiteSettings();
+  const whatsappHref = `https://wa.me/${settings.whatsapp.replace(/\D/g, "")}`;
 
   return (
     <main>

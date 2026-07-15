@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { CmsImage as Image } from "@/components/cms/CmsImage";
 import { AboutNav } from "./AboutNav";
 
 type AboutHeroProps = {

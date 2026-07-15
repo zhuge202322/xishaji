@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { FileText, Mail, MessageCircle } from "lucide-react";
-import { company } from "@/data/site";
+import type { PublicContact, PublicSiteSettings } from "@/lib/cms/types";
 
-export function FloatingInquiry() {
-  const whatsappHref = `https://wa.me/${company.phone.replace(/\D/g, "")}`;
+export function FloatingInquiry({ settings, contacts }: { settings: PublicSiteSettings; contacts: PublicContact[] }) {
+  const whatsappHref = contacts.find((item) => item.kind === "whatsapp")?.href || `https://wa.me/${settings.whatsapp.replace(/\D/g, "")}`;
+  const emailHref = contacts.find((item) => item.kind === "email")?.href || `mailto:${settings.email}`;
 
   return (
     <aside className="floating-inquiry" aria-label="Quick inquiry actions">
@@ -15,7 +16,7 @@ export function FloatingInquiry() {
         <MessageCircle size={21} aria-hidden />
         <span>WhatsApp</span>
       </a>
-      <a href={`mailto:${company.email}`} aria-label="Email VICMACH">
+      <a href={emailHref} aria-label={`Email ${settings.siteName}`}>
         <Mail size={21} aria-hidden />
         <span>Email</span>
       </a>
